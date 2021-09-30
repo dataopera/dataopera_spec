@@ -26,7 +26,7 @@ Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
 
 Serviço para obtenção do token de acesso que autoriza o uso dos demais serviços.
 
-+ Request (application/json)
++ Request (application/json)  Autenticação simples usada para acessar APIs
 
         {
             "grant_type": "client_credentials",
@@ -34,7 +34,7 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
             "client_secret": "123456"
         }
         
-+ Request (application/json)
++ Request (application/json) Autenticação Utilizada para acessar DATAMEA quando possui o publicToken(MPI) [preferêncial]
 
         {
             "grant_type": "client_credentials",
@@ -45,7 +45,7 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
             }
         }
 
-+ Request (application/json)
++ Request (application/json) Autenticação Utilizada para acessar DATAMEA  
 
         {
             "grant_type": "client_credentials",
@@ -54,10 +54,16 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
             "patient": {
                 "nome" : "PESSOA EXEMPLO",
                 "doc-cpf" : "000.000.000-00",
-                "data-nascimento" : "0000-00-00",
+                "doc-rg" : "0000000000",
+                "doc-cns" : "0000000000",
+                "nome-mae" : "NOME MAE PESSOA EXEMPLO",
+                "data-nascimento" : "0000-00-00",                
                 "genero" : "M",
                 "end-cidade" : "SÃO PAULO",
                 "end-estado" : "SP"
+                "end-pais": "Brasil"
+                "fone-celular": "11900000000"
+                "email" : "nome@dominio.com"
             }
         }
 
