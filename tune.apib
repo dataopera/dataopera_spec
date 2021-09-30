@@ -1,0 +1,545 @@
+FORMAT: 1A
+HOST:  https://tune.dataopera.com.br/
+
+# DataOpera - Interoperabilidade de Dados Clínicos
+
+Este documento tem o objetivo de especificar técnicamente como os parceiros devem enviar as mensagens com dados clínicos dos paciente para integração com a plataforma DataOpera.
+
+# Autenticação
+
+Utilizamos o **[OAuth](https://oauth.net)** ou **Basic Authentication** como métodos de autorização à API. 
+A autenticação se dá através de credendiais de acesso (id e senha) fornecidas pela DataOpera (enviamos por e-mail)
+que, no caso de OAuth se faz necessário acessar serviço abaixo para gerar um token de acesso com autorização para o uso do serviços dataopera.
+
+Com o token de acesso gerado, basta colocar no cabeçalho do HTTP usando Authorization na chamada do serviço Mapping HL7.
+
+```
+Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+```    
+
+
+# Group Serviços da API
+
+## Autenticação OAuth [/api/oauth]
+
+### Autenticação [POST]
+
+Serviço para obtenção do token de acesso que autoriza o uso dos demais serviços.
+
++ Request (application/json)
+
+        {
+            "grant_type": "client_credentials",
+            "client_id": "1",
+            "client_secret": "123456"
+        }
+        
++ Request (application/json)
+
+        {
+            "grant_type": "client_credentials",
+            "client_id": "1",
+            "client_secret": "123456",
+            "patient": {
+                "publicToken": "00000000-0000-0000-0000-000000000000"
+            }
+        }
+
++ Request (application/json)
+
+        {
+            "grant_type": "client_credentials",
+            "client_id": "1",
+            "client_secret": "123456",
+            "patient": {
+                "nome" : "PESSOA EXEMPLO",
+                "doc-cpf" : "000.000.000-00",
+                "data-nascimento" : "0000-00-00",
+                "genero" : "M",
+                "end-cidade" : "SÃO PAULO",
+                "end-estado" : "SP"
+            }
+        }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "access_token": "4f4ebff54fa5f6120bca11521f22ba23f604f80a",
+                "expires_in": 7200,
+                "token_type": "Bearer",
+                "scope": ""
+            }
+
+
+## Envio de dados clinicos [/api/message]
+
+### Envio de dados clinicos no formato JSON [POST]
+
+Serviço para o envio do JSON com os dados de um atendimento clínico de um paciente e transformação desse JSON em HL7.
+O documento JSON informado é o padrão, mas é possivel ter customizaçã ode acordo  com as necessidades do parceiro.
+
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+            Accept: application/json
+    
+    + Body
+    
+            {
+                "message_datetime": "20180501155836",
+                "message_id": "1234567890",
+                "event":{
+                    "recorded_datetime": "20180501155836"
+                },
+                "sistemaOrigem": "DataMea",
+                "paciente":{
+                    "id": "123456",
+                    "nomeCompleto": "Maria da Silva",
+                    "dataNascimento": "19620506",
+                    "sexo": "F",
+                    "nomeSocial": "Maria",
+                    "estadoCivil": "S",
+                    "rg": "222222222",
+                    "cpf": "11111111111",
+                    "cns": "1111111111111",
+                    "passaporte": "XXXXXXXXXXX",
+                    "nacionalidade": "brasileiro",
+                    "paisNascimento": "Brasil",
+                    "municipioNascimento": "São Paulo",
+                    "endereco":{
+                       "logradouro": "Avenida Paulista",
+                       "numero": "1472",
+                       "bairro": "Jardim Paulista",
+                       "cidade": "São Paulo",
+                       "uf": "SP",
+                       "cep": "75000001",
+                       "paisResidencia": "Brasil"
+                    },
+                    "contatos":{
+                        "telefone": "2345678",
+                        "email": "mariadasilva@dataopera.com",
+                        "celular": "11988888888"
+                    }
+                },
+                "profissional":{
+                    "nomeCompleto": "Jose da Silva",
+                    "registroProfissional": "11111",
+                    "conselho": "CRM",
+                    "ufconselho": "SP",
+                    "cbo": "225136",
+                    "cnsprofissional": "123132132"
+                },
+                "estabelecimentoSaude": { 
+                    "nomeFantasia": "Clinica do Jose",
+                    "cnes": "123456789"
+                },
+                "atendimentoClinico": {
+                    "id": "12345678",
+                    "dataHoraAdmissao": "20160923155836",
+                    "dataHoraDesfecho": "20160923155836",
+                    "observacao": "O paciente se queixou de dores de cabeça e dores no corpo.",
+                    "diagnosticos":[{
+                        "terminologia": "CID10",
+                        "codigo": "A90",
+                        "descricao": "Dengue [dengue clássico]"
+                    }],
+                    "procedimentosRealizados":[{
+                        "terminologia": "TUSS",
+                        "codigo": "10101012",
+                        "descricao": "Consultas",
+                        "quantidade": 1
+                    }],
+                    "prescricao":[{
+                        "descricao": "CETOPROFENO 100 MG",
+                        "posologia": "Tomar 2cp por dia"
+                    }],
+                    "financiamento": { 
+                        "descricao": "Particular",
+                        "plano": "",
+                        "carteirinha": ""
+                    }
+                }
+            }
+        
+
++ request (application/fhir+json)
+    + Header
+    
+            Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+            Accept: application/json
+    
+    + Body
+    
+            {
+                "resourceType" : "Bundle",
+                "type" : "collection",
+                "entry" : [ 
+                    {
+                        "resource" : {
+                            "resourceType" : "Patient",
+                            "id" : "1234",
+                            "identifier" : [ 
+                                {
+                                    "use" : "official",
+                                    "type" : {
+                                        "text" : "CPF"
+                                    },
+                                    "value" : "00000000000"
+                                }
+                            ],
+                            "name" : [ 
+                                {
+                                    "use" : "official",
+                                    "family" : "EXEMPLO",
+                                    "given" : [ 
+                                        "PACIENTE"
+                                    ]
+                                }
+                            ],
+                            "gender" : "male",
+                            "birthDate" : "1981-01-09"
+                        }
+                    }, 
+                    {
+                        "resource" : {
+                            "resourceType" : "AllergyIntolerance",
+                            "id" : "2348|46",
+                            "identifier" : [ 
+                                {
+                                    "value" : "2348|46"
+                                }
+                            ],
+                            "patient" : {
+                                "reference" : "Patient/1234"
+                            },
+                            "reaction" : [ 
+                                {
+                                    "substance" : {
+                                        "coding" : [ 
+                                            {
+                                                "code" : "46",
+                                                "display" : "Castanhas"
+                                            }
+                                        ]
+                                    },
+                                    "manifestation" : [ 
+                                        {
+                                            "coding" : [ 
+                                                {
+                                                    "code" : "2348|46",
+                                                    "display" : "Descriçao da reação"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        
++ Response 200 (application/json)
+
+            {
+                "status": "ok",
+                "message": "Mensagem processada com sucesso!"
+            }
+            
+            
+
+## Consentimento do Paciente [/api/agreement/consent]
+
+### Verificação do Status do Consentimento de Coleta e Compartilhamento de Dados Clínicos do paciente [GET]
+
+Serviço que consulta o status do consentimento de coleta de dados clínicos do paciente informado por meio do Token Público.
+    
++ Attributes
+    + publicToken: Token público do paciente. (string, required)
+    
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+            Accept: application/json
+    
+    + Body
+        
+            {
+                "publicToken": "98322343-1faf-41f5-8c76-9d4584c4b405"
+            }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "publicToken": "98322343-1faf-41f5-8c76-9d4584c4b405",
+                "nome": "Luiz Fernando Piazza Timo Iaria",
+                "authToCollect": 
+                    {
+                       "link": "http://attr.vaultid.cloud//d9/84/d984dbbc3471429caad9a2d41e0485c6/04030005109_1.crt",
+                        "createdAt": "2018-11-28 16:26:43"
+                    }
+                "status:
+                    {
+                      "status": true,
+                      "detail": {
+                        "signature": {
+                          "status": true,
+                          "code": 1185,
+                          "message": "All digital signatures of the document are intact"
+                        },
+                        "date": {
+                          "status": true,
+                          "code": 1187,
+                          "message": "Date of certificate is valid"
+                        },
+                        "crl": {
+                          "status": true,
+                          "code": 1191,
+                          "message": "CRL is valid"
+                        },
+                        "trust": {
+                          "status": true,
+                          "code": 1189,
+                          "chain": "Chain of certificate is trusted"
+                    }
+            }
++ Response 401 (application/json)
+    + Body
+
+            "Operador não autenticado"
+            
++ Response 406 (application/json)
+    + Body
+
+            {
+                "status": {
+                    "code": "401"
+                },
+                "details": "Token Inválido."
+            }
+
+
+
+### Consentimento de Compartilhamento de Dados Clínicos do paciente [POST]
+
+Este endpoint está liberado apenas para parceiros(empresas) que possuem permissão no processo de Consentimento em nome do Paciente, para isso o parceiro se responsábiliza pelo consentimento de compartilhamento dos dados do paciente informado por meio do Token Público.
+Para cada consentimento é gerado um certificado digital com os dados da origem do consentimento o qual é válido juridicamente de acordo com as legislações brasileira (LGPD).
+
+Este endpoint está prepara para o modelo de autenticação especificado para o parceiro (OAUTH ou Basic Authentication)
+
++ Attributes
+    + publicToken: Token público do paciente. (string, required)
+    + partnerToken: Token de identificação do parceiro [empresa]. (string, required)
+    
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+        
+            {
+                "partner": "CLIENTID-HOMOL",
+                "publicToken": "98322343-1faf-41f5-8c76-9d4584c4b405",
+                "metadados": {
+                    "patient": {
+                        "resourceType": "Patient",
+                        "id": "2953677",
+                        "identifier": [
+                            {
+                                "type": {
+                                    "text": "CPF"
+                                },
+                                "system": "http://gov.CPF",
+                                "value": "12313213213"
+                            },
+                            {
+                                "type": {
+                                    "text": "RG"
+                                },
+                                "system": "http://gov.RG",
+                                "value": "32132132"
+                            }
+                        ],
+                        "name": [
+                            {
+                                "family": "EXEMPLO",
+                                "given": [
+                                    "PACIENTE"
+                                ]
+                            }
+                        ],
+                        "gender": "male",
+                        "birthDate": "1981-04-11",
+                        "address": [
+                            {
+                                "use": "home",
+                                "line": [
+                                    "AV FARIAS LOBATO, 42"
+                                ],
+                                "city": "São Paulo",
+                                "district": "Liberdade"
+                            }
+                        ]
+                    },
+                    "environment": "prod",
+                    "spvll": "ce4e9e986b0fbc713624d54b83c36283.1f6e0dc3bca3e5db4d9cf827653346a4.2",
+                    "organizationId": "312",
+                    "identifier": {
+                        "key": "carteirinha",
+                        "value": "08818181614555"
+                    },
+                    "consent": {
+                        "typeId": "1",
+                        "isAccepted": false,
+                        "consentAt": "2021-09-12 09:11:22"
+                    },
+                    "ips": {
+                        "forwarded": "5464:132:c7f4:d62e:8444:530:ad99:af40, 192.214.16.12",
+                        "remote": "172.29.32.62"
+                    },
+                    "header": {
+                        "agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/86.0.4240.198 Safari\/537.36"
+                    }
+                }
+            }
+
+
+
++ Response 200 (application/json)
+    + Body
+
+            { 
+                "success": boolean
+            }
++ Response 401 (application/json)
+    + Body
+
+            "Operador não autenticado"
+            
++ Response 406 (application/json)
+    + Body
+
+            {
+                "status": {
+                    "code": "401"
+                },
+                "details": "Token Inválido."
+            }
+
+
+### Revogação de Consentimento de Compartilhamento de Dados Clínicos do paciente [DELETE]
+
+Este endpoint está liberado apenas para parceiros(empresas) que possuem permissão no processo de Consentimento em nome do Paciente, para isso o parceiro se responsábiliza pelo consentimento de compartilhamento dos dados do paciente informado por meio do Token Público.
+Para cada consentimento é gerado um certificado digital com os dados da origem do consentimento o qual é válido juridicamente de acordo com as legislações brasileira (LGPD).
+
+Este endpoint está prepara para o modelo de autenticação especificado para o parceiro (OAUTH ou Basic Authentication)
+
++ Attributes
+    + publicToken: Token público do paciente. (string, required)
+    + partnerToken: Token de identificação do parceiro [empresa]. (string, required)
+    
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+        
+            {
+                "partner": "CLIENTID-HOMOL",
+                "publicToken": "98322343-1faf-41f5-8c76-9d4584c4b405",
+                "metadados": {
+                    "patient": {
+                        "resourceType": "Patient",
+                        "id": "2953677",
+                        "identifier": [
+                            {
+                                "type": {
+                                    "text": "CPF"
+                                },
+                                "system": "http://gov.CPF",
+                                "value": "12313213213"
+                            },
+                            {
+                                "type": {
+                                    "text": "RG"
+                                },
+                                "system": "http://gov.RG",
+                                "value": "32132132"
+                            }
+                        ],
+                        "name": [
+                            {
+                                "family": "EXEMPLO",
+                                "given": [
+                                    "PACIENTE"
+                                ]
+                            }
+                        ],
+                        "gender": "male",
+                        "birthDate": "1981-04-11",
+                        "address": [
+                            {
+                                "use": "home",
+                                "line": [
+                                    "AV FARIAS LOBATO, 42"
+                                ],
+                                "city": "São Paulo",
+                                "district": "Liberdade"
+                            }
+                        ]
+                    },
+                    "environment": "prod",
+                    "spvll": "ce4e9e986b0fbc713624d54b83c36283.1f6e0dc3bca3e5db4d9cf827653346a4.2",
+                    "organizationId": "312",
+                    "identifier": {
+                        "key": "carteirinha",
+                        "value": "08818181614555"
+                    },
+                    "consent": {
+                        "typeId": "1",
+                        "isAccepted": false,
+                        "consentAt": "2021-09-12 09:11:22"
+                    },
+                    "ips": {
+                        "forwarded": "5464:132:c7f4:d62e:8444:530:ad99:af40, 192.214.16.12",
+                        "remote": "172.29.32.62"
+                    },
+                    "header": {
+                        "agent": "Mozilla\/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/86.0.4240.198 Safari\/537.36"
+                    }
+                }
+            }
+
+
+
++ Response 200 (application/json)
+    + Body
+
+            { 
+                "success": boolean
+            }
++ Response 401 (application/json)
+    + Body
+
+            "Operador não autenticado"
+            
++ Response 406 (application/json)
+    + Body
+
+            {
+                "status": {
+                    "code": "401"
+                },
+                "details": "Token Inválido."
+            }
+
+                        
+        

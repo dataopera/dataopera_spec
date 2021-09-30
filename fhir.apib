@@ -1,0 +1,1429 @@
+FORMAT: 1A
+HOST:  https://fhir.dataopera.com.br/v1/
+
+# DataOpera - FHIR
+
+Este documento tem o objetivo de auxiliar técnicamente como os parceiros devem consumir dados clínicos dos paciente para integração com a plataforma DataOpera por meio do padrão FHIR.
+
+# Autenticação
+
+Utilizamos o **[OAuth](https://oauth.net)** como framework de autorização à API. 
+A autenticação se dá através de credendiais de acesso (id e senha) fornecidas pela DataOpera (enviamos por e-mail)
+que irá gerar um token de acesso com autorização para o uso do serviço.
+
+Com o token de acesso gerado, basta colocar no cabeçalho do HTTP usando Authorization na chamada do serviço Mapping HL7.
+
+```
+Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+```    
+
+Para ver mais detalhes sobre o serviço de autenticação, consultar documentação em **https://dataopera.docs.apiary.io/#reference/servicos-da-api/autenticacao/autenticacao**
+
+
+## Consulta de dados clinicos [/_history?Patient.identifier={Patient.identifier}&_since={_since}&_until={_until}&Practitioner.identifier={Practitioner.identifier}]            
+
+### Consulta de dados clinicos de pacientes [GET]
+
+Serviço que consulta os dados clínicos do paciente por meio do Token Público
+Documentos de referência:
+- Planilha de mapeamneto de informações: https://1drv.ms/x/s!AjoizOBnV4bCtxN6Tv9h8H1peFmy?e=WnKe29
+
+
++ Parameters
+    + Patient.identifier (required, string, `1`) ...  identificador/Token público do paciente.
+    + _since (optional, string, `1`) ...  Filtro de data inicio, caso não informado será buscado desde o primeiro dado clinico.
+    + _until (optional, string, `1`) ...  Filtro de data fim, caso não informado será buscado até o último dado clinico.
+    + Practitioner.identifier (optional, string, `1`) ...  identificador/Token público do profissional (médico).
+
+    
++ request (application/fhir+json)
+    + Header
+    
+            Authorization: Bearer 4f4ebff54fa5f6120bca1221f22b323f614f80a
+            Accept: application/fhir+json;
+    
+
++ Response 200 (application/json)
+    + Body
+
+            {
+              "resourceType": "Bundle",
+              "id": "bundle-history",
+              "meta": {
+                "lastUpdated": "2019-10-14T08:23:30+11:00"
+              },
+              "type": "history",
+              "link": [
+                {
+                  "relation": "self",
+                  "url": "http://fhir.dataopera.com.br/v1/_history?Patient.identifier=31612d7b-cb3a-4612-b0ad-5d9145936870&_since=2019-02-06&_until=2019-02-07"
+                }
+              ],
+              "total": 33,
+              "entry": [
+                {
+                  "resource": {
+                    "resourceType": "Patient",
+                    "id": "31612d7b-cb3a-4612-b0ad-5d9145936870",
+                    "identifier": [
+                      {
+                        "system": "gov.cns",
+                        "value": "881284751090009"
+                      }
+                    ],
+                    "address": [
+                      {
+                        "city": "4314902",
+                        "country": "BRA",
+                        "postalCode": "91120250",
+                        "state": "43"
+                      }
+                    ],
+                    "deceasedBoolean": false,
+                    "extension": [
+                      {
+                        "url": "mothersName",
+                        "valueString": "MARIA HELENA"
+                      },
+                      {
+                        "url": "race",
+                        "valueString": "Branca"
+                      },
+                      {
+                        "url": "birthPlace",
+                        "valueString": "SÃO PAULO"
+                      },
+                      {
+                        "url": "birthcountry",
+                        "valueString": "BRA"
+                      }
+                    ],
+                    "gender": "FEMININO",
+                    "language": "PT",
+                    "maritalStatus": {
+                      "coding": [
+                        {
+                          "code": "M"
+                        }
+                      ]
+                    },
+                    "name": [
+                      {
+                        "family": [
+                          "OLIVEIRA"
+                        ],
+                        "given": [
+                          "FERNANDA"
+                        ]
+                      }
+                    ]
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Encounter",
+                    "id": "76876876876",
+                    "identifier": [
+                      {
+                        "value": "76876876876"
+                      }
+                    ],
+                    "serviceProvider": {
+                      "reference": "Organization/2262568",
+                      "display": "HOSPITAL SAO LUCAS"
+                    },
+                    "origin": {
+                      "reference": "Organization/2262568",
+                      "display": "HOSPITAL SAO LUCAS"
+                    },
+                    "participant": [
+                      {
+                        "individual": {
+                          "display": "SIMONE AZEVEDO",
+                          "reference": "23456-SP",
+                          "identifier": [
+                            {
+                              "system": "gov.cpf",
+                              "value": "99752757022"
+                            },
+                            {
+                              "system": "gov.crm",
+                              "value": "23456-SP"
+                            }
+                          ]
+                        },
+                        "type": [
+                          {
+                            "coding": [
+                              {
+                                "code": "ADM",
+                                "system": "http://hl7.org/fhir/participant-type"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ],
+                    "period": {
+                      "end": "2019-02-06T14:19:33.446Z",
+                      "start": "2019-02-06T14:19:33.446Z"
+                    },
+                    "status": "final",
+                    "subject": {
+                      "display": "FERNANDA DA SILVEIRA",
+                      "reference": "Patient/31612d7b-cb3a-4612-b0ad-5d9145936870"
+                    },
+                    "extension": [
+                      {
+                        "url": "assistanceModality",
+                        "valueString": "04"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "ba2df807-b62b-4d63-9373-42edc50d6f8a",
+                    "code": {
+                      "coding": [
+                        {
+                          "code": "AMBULATORIO",
+                          "display": "AMBULATORIO",
+                          "system": "HL7"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/047d8eff-f771-4552-9934-d76cf0a0728c"
+                    },
+                    "subject": {
+                      "display": "FERNANDA DA SILVEIRA",
+                      "reference": "Patient/31612d7b-cb3a-4612-b0ad-5d9145936870"
+                    },
+                    "value": [
+                      {
+                        "system": "urn:oid:2.16.840.1.113883.2.21.1.122",
+                        "code": "90159993",
+                        "display": "GLIFAGE 850 MG"
+                      }
+                    ],
+                    "valueString": "GLIFAGE 850 MG-(Glucoformin, Metformina) Tomar 1 cp no café, almoço e janta, aumentando a dose"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "82b8253c-727e-4dbb-859f-2efb3191984a",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/2b88c494-d0d0-48d0-b906-7650b4c1069f"
+                    },
+                    "status": "final",
+                    "category": "principal",
+                    "extension": [
+                      {
+                        "url": "hypothesis",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "code": {
+                      "text": "J45.0",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "I10",
+                          "display": "Hipertensão essencial"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "FERNANDA DA SILVEIRA",
+                      "reference": "Patient/31612d7b-cb3a-4612-b0ad-5d9145936870"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DocumentReference",
+                    "id": "518eb705-2e24-42e8-8baa-92a501a44f5d",
+                    "status": "final",
+                    "author": [
+                      {
+                        "reference": "Practictioner/23456-SP"
+                      }
+                    ],
+                    "content": [
+                      {
+                        "attachment": {
+                          "title": "CONSULTA"
+                        }
+                      }
+                    ],
+                    "context": {
+                      "encounter": {
+                        "id": "Encounter/76876876876"
+                      }
+                    },
+                    "subject": {
+                      "display": "FERNANDA DA SILVEIRA",
+                      "reference": "Patient/31612d7b-cb3a-4612-b0ad-5d9145936870"
+                    },
+                    "type": {
+                      "coding": [
+                        {
+                          "id": "57833-6",
+                          "system": "LOINC"
+                        }
+                      ],
+                      "text": "ANAMNESE"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "AllergyIntolerance",
+                    "id": "46d7ea1b-927a-4199-98a6-de6e011e1e26",
+                    "identifier": [
+                      {
+                        "system": "http://acme.com/ids/patients/risks",
+                        "value": "494762223"
+                      }
+                    ],
+                    "type": "allergy",
+                    "category": [
+                      "food"
+                    ],
+                    "patient": {
+                      "display": "FERNANDA DA SILVEIRA",
+                      "reference": "Patient/31612d7b-cb3a-4612-b0ad-5d9145936870"
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "reaction": [
+                      {
+                        "substance": {
+                          "text": "Extrato de caju"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Reação anafilática"
+                          }
+                        ],
+                        "description": "Intolerância a extrato de castanha de caju"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "9ede742b-3e21-43b5-b7ab-20e9affa77fe",
+                    "code": {
+                      "coding": [
+                        {
+                          "code": "AMBULATORIO",
+                          "display": "AMBULATORIO",
+                          "system": "HL7"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/fc0afb82-fbd9-4e8b-ac7d-e004b611aac2"
+                    },
+                    "subject": {
+                      "display": "MARIA JONES NUNES",
+                      "reference": "Patient/a32e05f3-cf45-42c8-bbbc-8566ebedc119"
+                    },
+                    "extension": [
+                      {
+                        "url": "continuous",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "value": [
+                      {
+                        "system": "urn:oid:2.16.840.1.113883.2.21.1.122",
+                        "code": "90159993",
+                        "display": "GLIFAGE 850 MG"
+                      }
+                    ],
+                    "valueString": "GLIFAGE 850 MG-(Glucoformin, Metformina) Tomar 1 cp no café, almoço e janta, aumentando a dose"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DocumentReference",
+                    "id": "63801f2a-41fd-4b5c-ac90-074211744af6",
+                    "status": "final",
+                    "author": [
+                      {
+                        "reference": "Practictioner/23456-SP"
+                      }
+                    ],
+                    "content": [
+                      {
+                        "attachment": {
+                          "title": "CONSULTA"
+                        }
+                      }
+                    ],
+                    "context": {
+                      "encounter": {
+                        "id": "Encounter/76876876876"
+                      }
+                    },
+                    "subject": {
+                      "display": "MARIA JONES NUNES",
+                      "reference": "Patient/a32e05f3-cf45-42c8-bbbc-8566ebedc119"
+                    },
+                    "type": {
+                      "coding": [
+                        {
+                          "id": "57833-6",
+                          "system": "LOINC"
+                        }
+                      ],
+                      "text": "ANAMNESE"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "82c0b31a-95ee-40c9-ae68-3b4a02a1d8a1",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/63801f2a-41fd-4b5c-ac90-074211744af6"
+                    },
+                    "status": "final",
+                    "category": "principal",
+                    "extension": [
+                      {
+                        "url": "hypothesis",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "code": {
+                      "text": "J45.0",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "J45.0",
+                          "display": "Asma predominantemente alérgic"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "MARIA JONES NUNES",
+                      "reference": "Patient/a32e05f3-cf45-42c8-bbbc-8566ebedc119"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "AllergyIntolerance",
+                    "id": "d902e74f-d483-46cd-b4f4-d19cc77632f1",
+                    "identifier": [
+                      {
+                        "system": "http://acme.com/ids/patients/risks",
+                        "value": "494762223"
+                      }
+                    ],
+                    "type": "allergy",
+                    "category": [
+                      "food"
+                    ],
+                    "patient": {
+                      "display": "MARIA JONES NUNES",
+                      "reference": "Patient/a32e05f3-cf45-42c8-bbbc-8566ebedc119"
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "reaction": [
+                      {
+                        "substance": {
+                          "text": "Amendoin"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Reação anafilática"
+                          }
+                        ],
+                        "description": "Intolerância a Amendoin"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DocumentReference",
+                    "id": "2f39493b-5a5f-4108-b842-e5b157e2766d",
+                    "status": "final",
+                    "author": [
+                      {
+                        "reference": "Practictioner/52091-SP"
+                      }
+                    ],
+                    "content": [
+                      {
+                        "attachment": {
+                          "title": "PRESCRICAO DE MEDICACAO"
+                        }
+                      }
+                    ],
+                    "context": {
+                      "encounter": {
+                        "id": "Encounter/76876876876"
+                      }
+                    },
+                    "subject": {
+                      "display": "MARCELO DA SILVA",
+                      "reference": "Patient/423643a6-6d3d-4cb0-a9c7-3e5a7304c572"
+                    },
+                    "type": {
+                      "coding": [
+                        {
+                          "id": "57833-6",
+                          "system": "LOINC"
+                        }
+                      ],
+                      "text": "ANAMNESE"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "b46e24d7-208a-4154-8c8f-cc8e7c526c52",
+                    "code": {
+                      "coding": [
+                        {
+                          "code": "AMBULATORIO",
+                          "display": "AMBULATORIO",
+                          "system": "HL7"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/2f39493b-5a5f-4108-b842-e5b157e2766d"
+                    },
+                    "subject": {
+                      "display": "MARCELO DA SILVA",
+                      "reference": "Patient/423643a6-6d3d-4cb0-a9c7-3e5a7304c572"
+                    },
+                    "value": [
+                      {
+                        "system": "urn:oid:2.16.840.1.113883.2.21.1.122",
+                        "code": "90159110",
+                        "display": "AMARYL 3 MG"
+                      }
+                    ],
+                    "valueString": "AMARYL 3 MG-Tomar 1 cp à tarde"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "b46e24d7-208a-4154-8c8f-cc8e7c526c52",
+                    "code": {
+                      "coding": [
+                        {
+                          "system": "HL7",
+                          "code": "3141-9",
+                          "display": "Peso"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/2f39493b-5a5f-4108-b842-e5b157e2766d"
+                    },
+                    "subject": {
+                      "display": "MARCELO DA SILVA",
+                      "reference": "Patient/423643a6-6d3d-4cb0-a9c7-3e5a7304c572"
+                    },
+                    "valueQuantity": {
+                      "value": 83
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "b46e24d7-208a-4154-8c8f-cc8e7c526c52",
+                    "code": {
+                      "coding": [
+                        {
+                          "system": "HL7",
+                          "code": "8302-2",
+                          "display": "Altura"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/2f39493b-5a5f-4108-b842-e5b157e2766d"
+                    },
+                    "subject": {
+                      "display": "MARCELO DA SILVA",
+                      "reference": "Patient/423643a6-6d3d-4cb0-a9c7-3e5a7304c572"
+                    },
+                    "valueQuantity": {
+                      "value": 1.75
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "b029e259-0876-4837-bc64-a3132873fcab",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/61762b45-1ce8-47c0-abe4-67a819bccfd9"
+                    },
+                    "status": "final",
+                    "category": "previous",
+                    "extension": [
+                      {
+                        "url": "familyRelationship",
+                        "valueString": "pai"
+                      }
+                    ],
+                    "code": {
+                      "text": "I10",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "I10",
+                          "display": "Hipertensão essencial"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "MARCELO DA SILVA",
+                      "reference": "Patient/423643a6-6d3d-4cb0-a9c7-3e5a7304c572"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DocumentReference",
+                    "id": "3db61c87-104e-48d0-a783-8a5cbc66c21b",
+                    "status": "final",
+                    "author": [
+                      {
+                        "reference": "Practictioner/51242-SP"
+                      }
+                    ],
+                    "content": [
+                      {
+                        "attachment": {
+                          "title": "PRESCRICAO DE MEDICACAO"
+                        }
+                      }
+                    ],
+                    "context": {
+                      "encounter": {
+                        "id": "Encounter/76876876876"
+                      }
+                    },
+                    "subject": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "type": {
+                      "coding": [
+                        {
+                          "id": "57833-6",
+                          "system": "LOINC"
+                        }
+                      ],
+                      "text": "ANAMNESE"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "ba1b78cf-c2d1-478f-b443-78db8859e75f",
+                    "code": {
+                      "coding": [
+                        {
+                          "code": "AMBULATORIO",
+                          "display": "AMBULATORIO",
+                          "system": "HL7"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/3db61c87-104e-48d0-a783-8a5cbc66c21b"
+                    },
+                    "subject": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "extension": [
+                      {
+                        "url": "continuous",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "value": [
+                      {
+                        "system": "urn:oid:2.16.840.1.113883.2.21.1.122",
+                        "code": "90159110",
+                        "display": "AMARYL 3 MG"
+                      }
+                    ],
+                    "valueString": "AMARYL 3 MG-Tomar 1 cp à tarde"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "0661982f-9116-4aa5-b6c0-79fe5ff5a27a",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/5e826a53-cad9-40c3-b71c-909e6f08b440"
+                    },
+                    "status": "final",
+                    "category": "principal",
+                    "extension": [
+                      {
+                        "url": "hypothesis",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "code": {
+                      "text": "J45.0",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "J45.0",
+                          "display": "Lúpus eritematoso disseminado (sistêmico) não especificado"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "0661982f-9116-4aa5-b6c0-79fe5ff5a27a",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/5e826a53-cad9-40c3-b71c-909e6f08b440"
+                    },
+                    "status": "final",
+                    "category": "previous",
+                    "code": {
+                      "text": "J45.0",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "J45.0",
+                          "display": "Lúpus eritematoso disseminado (sistêmico) não especificado"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "0661982f-9116-4aa5-b6c0-79fe5ff5a27a",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/5e826a53-cad9-40c3-b71c-909e6f08b440"
+                    },
+                    "status": "final",
+                    "category": "previous",
+                    "extension": [
+                      {
+                        "url": "familyRelationship",
+                        "valueString": "mãe"
+                      }
+                    ],
+                    "code": {
+                      "text": "J45.0",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "J45.0",
+                          "display": "Lúpus eritematoso disseminado (sistêmico) não especificado"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "AllergyIntolerance",
+                    "id": "22e355ac-e762-4c93-bbe3-72c0a63f40ed",
+                    "identifier": [
+                      {
+                        "system": "http://acme.com/ids/patients/risks",
+                        "value": "494762223"
+                      }
+                    ],
+                    "type": "allergy",
+                    "category": [
+                      "medication"
+                    ],
+                    "patient": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "reaction": [
+                      {
+                        "substance": {
+                          "text": "Aspirina"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Falta de ar"
+                          }
+                        ],
+                        "description": "Alergia a aspirina"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "AllergyIntolerance",
+                    "id": "22e355ac-e762-4c93-bbe3-72c0a63f40ed",
+                    "identifier": [
+                      {
+                        "system": "http://acme.com/ids/patients/risks",
+                        "value": "494762223"
+                      }
+                    ],
+                    "type": "intolerance",
+                    "category": [
+                      "food"
+                    ],
+                    "patient": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "reaction": [
+                      {
+                        "substance": {
+                          "text": "Extrato de caju"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Falta de ar"
+                          }
+                        ],
+                        "description": "Intolerância a Extrato de caju"
+                      },
+                      {
+                        "substance": {
+                          "text": "Extrato de acerola"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Falta de ar"
+                          }
+                        ],
+                        "description": "Intolerância a Extrato de acerola"
+                      },
+                      {
+                        "substance": {
+                          "text": "Extrato de jabuticaba"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Falta de ar"
+                          }
+                        ],
+                        "description": "Intolerância a Extrato de jabuticaba"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "QuestionnaireResponse",
+                    "id": "20171121-1657770794",
+                    "item": [
+                      {
+                        "linkId": "fitnessActivities",
+                        "text": "Pratica atividade física",
+                        "answer": [
+                          {
+                            "valueString": "Sim"
+                          }
+                        ]
+                      },
+                      {
+                        "linkId": "smoke",
+                        "text": "Fuma",
+                        "answer": [
+                          {
+                            "valueString": "Não"
+                          }
+                        ]
+                      },
+                      {
+                        "linkId": "alcohol",
+                        "text": "Bebidas alcolicas",
+                        "answer": [
+                          {
+                            "valueString": "Sim, eventualmente"
+                          }
+                        ]
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "status": "final",
+                    "subject": {
+                      "display": "NILZA PINHEIRO",
+                      "reference": "Patient/72bafc04-1efa-490c-af95-5c7a31b4b20c"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DocumentReference",
+                    "id": "055849a3-db82-42c1-a9fe-38647d91e0fd",
+                    "status": "final",
+                    "author": [
+                      {
+                        "reference": "Practictioner/52091-SP"
+                      }
+                    ],
+                    "content": [
+                      {
+                        "attachment": {
+                          "title": "PRESCRICAO DE MEDICACAO"
+                        }
+                      }
+                    ],
+                    "context": {
+                      "encounter": {
+                        "id": "Encounter/76876876876"
+                      }
+                    },
+                    "subject": {
+                      "display": "CARLA DA SILVA",
+                      "reference": "Patient/d7a0e050-2c21-46bc-aa36-0ecaa7ee9e54"
+                    },
+                    "type": {
+                      "coding": [
+                        {
+                          "id": "57833-6",
+                          "system": "LOINC"
+                        }
+                      ],
+                      "text": "ANAMNESE"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "aa08914c-dfe4-415b-b69d-bee716ebf627",
+                    "code": {
+                      "coding": [
+                        {
+                          "system": "HL7",
+                          "code": "3141-9",
+                          "display": "Peso"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/055849a3-db82-42c1-a9fe-38647d91e0fd"
+                    },
+                    "subject": {
+                      "display": "CARLA DA SILVA",
+                      "reference": "Patient/d7a0e050-2c21-46bc-aa36-0ecaa7ee9e54"
+                    },
+                    "valueQuantity": {
+                      "value": 80
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "aa08914c-dfe4-415b-b69d-bee716ebf627",
+                    "code": {
+                      "coding": [
+                        {
+                          "system": "HL7",
+                          "code": "8302-2",
+                          "display": "Altura"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/055849a3-db82-42c1-a9fe-38647d91e0fd"
+                    },
+                    "subject": {
+                      "display": "CARLA DA SILVA",
+                      "reference": "Patient/d7a0e050-2c21-46bc-aa36-0ecaa7ee9e54"
+                    },
+                    "valueQuantity": {
+                      "value": 1.6
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "4a5b5b17-65f1-449b-8a24-ef8e830c4950",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "status": "final",
+                    "category": "principal",
+                    "extension": [
+                      {
+                        "url": "hypothesis",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "code": {
+                      "text": "R06.2",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "R06.2",
+                          "display": "Respiração ofegante"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "CARLA DA SILVA",
+                      "reference": "Patient/d7a0e050-2c21-46bc-aa36-0ecaa7ee9e54"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "QuestionnaireResponse",
+                    "id": "20171121-1657770794",
+                    "item": [
+                      {
+                        "linkId": "fitnessActivities",
+                        "text": "Pratica atividade física",
+                        "answer": [
+                          {
+                            "valueString": "Não"
+                          }
+                        ]
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "status": "final",
+                    "subject": {
+                      "display": "CARLA DA SILVA",
+                      "reference": "Patient/d7a0e050-2c21-46bc-aa36-0ecaa7ee9e54"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DocumentReference",
+                    "id": "01297599-6d01-4571-8c21-f9eb6ea47868",
+                    "status": "final",
+                    "author": [
+                      {
+                        "reference": "Practictioner/51242-SP"
+                      }
+                    ],
+                    "content": [
+                      {
+                        "attachment": {
+                          "title": "PRESCRICAO DE MEDICACAO"
+                        }
+                      }
+                    ],
+                    "context": {
+                      "encounter": {
+                        "id": "Encounter/76876876876"
+                      }
+                    },
+                    "subject": {
+                      "display": "RICARDO FERNANDER ARAGÃO",
+                      "reference": "Patient/2d2ec3bf-0648-4630-b6d6-ed2c00b86887"
+                    },
+                    "type": {
+                      "coding": [
+                        {
+                          "id": "57833-6",
+                          "system": "LOINC"
+                        }
+                      ],
+                      "text": "ANAMNESE"
+                    }
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "Observation",
+                    "id": "c1e1397f-5764-4449-95d1-2b5a9d9d3ea4",
+                    "code": {
+                      "coding": [
+                        {
+                          "code": "AMBULATORIO",
+                          "display": "AMBULATORIO",
+                          "system": "HL7"
+                        }
+                      ]
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/01297599-6d01-4571-8c21-f9eb6ea47868"
+                    },
+                    "subject": {
+                      "display": "RICARDO FERNANDER ARAGÃO",
+                      "reference": "Patient/2d2ec3bf-0648-4630-b6d6-ed2c00b86887"
+                    },
+                    "extension": [
+                      {
+                        "url": "continuous",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "value": [
+                      {
+                        "system": "urn:oid:2.16.840.1.113883.2.21.1.122",
+                        "code": "90021444",
+                        "display": "ASPIRINA PREVENT 100 MG"
+                      }
+                    ],
+                    "valueString": "ASPIRINA PREVENT 100 MG Tomar 1 vez ao dia"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "DiagnosticReport",
+                    "id": "99bf94a8-3ca4-43ec-886b-48f8da0220d8",
+                    "identifier": [
+                      {
+                        "system": "2.16.840.1.113883.6.3",
+                        "type": "CID-10"
+                      }
+                    ],
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "partOf": {
+                      "reference": "DocumentReference/4f7a37dc-14c2-42c8-9b85-bfacb550a872"
+                    },
+                    "status": "final",
+                    "category": "principal",
+                    "extension": [
+                      {
+                        "url": "hypothesis",
+                        "valueBoolean": "true"
+                      }
+                    ],
+                    "code": {
+                      "text": "H10",
+                      "coding": [
+                        {
+                          "system": "2.16.840.1.113883.6.3",
+                          "type": "CID-10",
+                          "code": "H10",
+                          "display": "Conjuntivite"
+                        }
+                      ],
+                      "status": "S"
+                    },
+                    "subject": {
+                      "display": "RICARDO FERNANDER ARAGÃO",
+                      "reference": "Patient/2d2ec3bf-0648-4630-b6d6-ed2c00b86887"
+                    },
+                    "issued": "2019-07-31T21:45:11-0300"
+                  }
+                },
+                {
+                  "resource": {
+                    "resourceType": "AllergyIntolerance",
+                    "id": "f3ced1eb-94f8-4a78-ab0d-6bd79b368375",
+                    "identifier": [
+                      {
+                        "system": "http://acme.com/ids/patients/risks",
+                        "value": "494762223"
+                      }
+                    ],
+                    "type": "allergy",
+                    "category": [
+                      "medication"
+                    ],
+                    "patient": {
+                      "display": "RICARDO FERNANDER ARAGÃO",
+                      "reference": "Patient/2d2ec3bf-0648-4630-b6d6-ed2c00b86887"
+                    },
+                    "encounter": {
+                      "reference": "Encounter/76876876876"
+                    },
+                    "reaction": [
+                      {
+                        "substance": {
+                          "text": "Atracúrio"
+                        },
+                        "manifestation": [
+                          {
+                            "text": "Falta de ar"
+                          }
+                        ],
+                        "description": "Alergia a Atracúrio"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
++ Response 400 (application/json)
+    + Body
+
+            {
+              "resourceType": "Bundle",
+              "id": "bundle-search-warning",
+              "meta": {
+                "lastUpdated": "2017-03-14T08:23:30+11:00"
+              },
+              "type": "searchset",
+              "total": 0,
+              "link": [
+                {
+                  "relation": "self",
+                  "url": "https://example.dataopera.com.br/fhir/_history?Patient.identifier=22dfc93b-7864-3453-83f2-b6907e4d6389"
+                }
+              ],
+              "entry": [
+                {
+                  "resource": {
+                    "resourceType": "OperationOutcome",
+                    "id": "warning",
+                    "issue": [
+                      {
+                        "severity": "warning",
+                        "code": "bad-request",
+                        "details": {
+                          "text": "O recurso não pôde ser analisado ou falhou nas regras básicas de validação do FHIR"
+                        }
+                      }
+                    ]
+                  },
+                  "search": {
+                    "mode": "outcome"
+                  }
+                }
+              ]
+            }
+
+            
++ Response 401 (application/json)
+    + Body
+
+            {
+              "resourceType": "Bundle",
+              "id": "bundle-search-warning",
+              "meta": {
+                "lastUpdated": "2017-03-14T08:23:30+11:00"
+              },
+              "type": "searchset",
+              "total": 0,
+              "link": [
+                {
+                  "relation": "self",
+                  "url": "https://example.dataopera.com.br/fhir/_history?Patient.identifier=22dfc93b-7864-3453-83f2-b6907e4d6389"
+                }
+              ],
+              "entry": [
+                {
+                  "resource": {
+                    "resourceType": "OperationOutcome",
+                    "id": "warning",
+                    "issue": [
+                      {
+                        "severity": "warning",
+                        "code": "not-authorized",
+                        "details": {
+                          "text": "Acesso não autorizado"
+                        }
+                      }
+                    ]
+                  },
+                  "search": {
+                    "mode": "outcome"
+                  }
+                }
+              ]
+            }
+
++ Response 404 (application/json)
+    + Body
+
+            {
+              "resourceType": "Bundle",
+              "id": "bundle-search-warning",
+              "meta": {
+                "lastUpdated": "2017-03-14T08:23:30+11:00"
+              },
+              "type": "searchset",
+              "total": 0,
+              "link": [
+                {
+                  "relation": "self",
+                  "url": "https://example.dataopera.com.br/fhir/_history?Patient.identifier=22dfc93b-7864-3453-83f2-b6907e4d6389"
+                }
+              ],
+              "entry": [
+                {
+                  "resource": {
+                    "resourceType": "OperationOutcome",
+                    "id": "warning",
+                    "issue": [
+                      {
+                        "severity": "warning",
+                        "code": "not-found",
+                        "details": {
+                          "text": "Tipo de recurso não suportado ou não é um endpoint FHIR"
+                        }
+                      }
+                    ]
+                  },
+                  "search": {
+                    "mode": "outcome"
+                  }
+                }
+              ]
+            }
+            
+        
