@@ -25,9 +25,6 @@ Para ver mais detalhes sobre o serviço de autenticação, consultar documentaç
 ### Consulta de dados clinicos de pacientes [GET]
 
 Serviço que consulta os dados clínicos do paciente por meio do Token Público
-Documentos de referência:
-- Planilha de mapeamneto de informações: https://1drv.ms/x/s!AjoizOBnV4bCtxN6Tv9h8H1peFmy?e=WnKe29
-
 
 + Parameters
     + Patient.identifier (required, string, `1`) ...  identificador/Token público do paciente.
@@ -39,7 +36,7 @@ Documentos de referência:
 + request (application/fhir+json)
     + Header
     
-            Authorization: Bearer 4f4ebff54fa5f6120bca1221f22b323f614f80a
+            Authorization: Bearer 4f4abff54fa5f6120bcd1221f22b323f614f80a
             Accept: application/fhir+json;
     
 
@@ -56,7 +53,7 @@ Documentos de referência:
               "link": [
                 {
                   "relation": "self",
-                  "url": "http://fhir.dataopera.com.br/v1/_history?Patient.identifier=31612d7b-cb3a-4612-b0ad-5d9145936870&_since=2019-02-06&_until=2019-02-07"
+                  "url": "http://fhir.dataopera.com.br/v1/_history?Patient.identifier=91612d7b-cb3a-4612-b0ad-5d9145936870&_since=2019-02-06&_until=2019-02-07"
                 }
               ],
               "total": 33,
