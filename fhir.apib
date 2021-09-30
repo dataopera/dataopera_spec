@@ -20,17 +20,17 @@ Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
 Para ver mais detalhes sobre o serviço de autenticação, consultar documentação em **https://dataopera.docs.apiary.io/#reference/servicos-da-api/autenticacao/autenticacao**
 
 
-## Consulta de dados clinicos [/_history?Patient.identifier={Patient.identifier}&_since={_since}&_until={_until}&Practitioner.identifier={Practitioner.identifier}]            
+## Consulta de dados clinicos [/_history?Patient.identifier={Patient.identifier}&_since={_since}&_until={_until}]            
 
 ### Consulta de dados clinicos de pacientes [GET]
 
 Serviço que consulta os dados clínicos do paciente por meio do Token Público
+Regex utilizado para validação dos parametros _since e _until: ?([1-9][0-9]{3}|0[0-9]{3})(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?
 
 + Parameters
     + Patient.identifier (required, string, `1`) ...  identificador/Token público do paciente.
     + _since (optional, string, `1`) ...  Filtro de data inicio, caso não informado será buscado desde o primeiro dado clinico.
-    + _until (optional, string, `1`) ...  Filtro de data fim, caso não informado será buscado até o último dado clinico.
-    + Practitioner.identifier (optional, string, `1`) ...  identificador/Token público do profissional (médico).
+    + _until (optional, string, `1`) ...  Filtro de data fim, caso não informado será buscado até o último dado clinico.    
 
     
 + request (application/fhir+json)
