@@ -274,6 +274,9 @@ O padrão a ser utilizado no document odeverá ser definido em temp ode projeto,
 Serviço que consulta o status do consentimento de coleta de dados clínicos do paciente informado por meio do Token Público.
 
 + request (application/json)
+    + Attributes
+        + publicToken: Token público do paciente. (string, required)        
+
     + Header
     
             Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
@@ -346,9 +349,10 @@ Para cada consentimento é gerado um certificado digital com os dados da origem 
 Este endpoint está prepara para o modelo de autenticação especificado para o parceiro (OAUTH ou Basic Authentication)
 
 + Attributes
-    + publicToken: Token público do paciente. (string, required)
-    + partnerToken: Token de identificação do parceiro [empresa]. (string, required)
-    
+        + publicToken: Token público do paciente. (string, required)
+        + partnerToken: Token de identificação do parceiro [empresa]. (string, required)
+        + metadados: Dados de comprovaçã oda captura do consentimento pelo sistema origem. (required)
+        
 + request (application/json)
     + Header
     
@@ -454,11 +458,14 @@ Para cada consentimento é gerado um certificado digital com os dados da origem 
 
 Este endpoint está prepara para o modelo de autenticação especificado para o parceiro (OAUTH ou Basic Authentication)
 
-+ Attributes
-    + publicToken: Token público do paciente. (string, required)
-    + partnerToken: Token de identificação do parceiro [empresa]. (string, required)
+
     
 + request (application/json)
+    + Attributes
+        + publicToken: Token público do paciente. (string, required)
+        + partnerToken: Token de identificação do parceiro [empresa]. (string, required)
+        + metadados: Dados de comprovaçã oda captura do consentimento pelo sistema origem. (required)
+        
     + Header
     
             Authorization: Bearer GENERATED_TOKEN
