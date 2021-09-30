@@ -34,6 +34,16 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
             "client_secret": "123456"
         }
         
++ Response 200 (application/json)
+    + Body
+
+            {
+                "access_token": "4f4ebff54fa5f6120bca11521f22ba23f604f80a",
+                "expires_in": 7200,
+                "token_type": "Bearer",
+                "scope": ""
+            }
+        
 + Request (application/json) Autenticação Utilizada para acessar DATAMEA quando possui o publicToken(MPI) [preferêncial]
 
         {
@@ -44,6 +54,16 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
                 "publicToken": "00000000-0000-0000-0000-000000000000"
             }
         }
+
++ Response 200 (application/json)
+    + Body
+
+            {
+                "access_token": "4f4ebff54fa5f6120bca11521f22ba23f604f80a",
+                "expires_in": 7200,
+                "token_type": "Bearer",
+                "scope": ""
+            }
 
 + Request (application/json) Autenticação Utilizada para acessar DATAMEA  
 
