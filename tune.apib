@@ -22,11 +22,12 @@ Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
 
 ## Autenticação OAuth [/api/oauth]
 
-### Autenticação [POST]
+### Autenticação [POST] 
 
 Serviço para obtenção do token de acesso que autoriza o uso dos demais serviços.
+Neste exemplo, autenticação simples usada para acessar APIs
 
-+ Request (application/json)  Autenticação simples usada para acessar APIs
++ Request Quando irá acessar apis sem necessecidade de informa paciente. (application/json)  
 
         {
             "grant_type": "client_credentials",
@@ -34,17 +35,7 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
             "client_secret": "123456"
         }
         
-+ Response 200 (application/json)
-    + Body
-
-            {
-                "access_token": "4f4ebff54fa5f6120bca11521f22ba23f604f80a",
-                "expires_in": 7200,
-                "token_type": "Bearer",
-                "scope": ""
-            }
-        
-+ Request (application/json) Autenticação Utilizada para acessar DATAMEA quando possui o publicToken(MPI) [preferêncial]
++ Request Quando irá acessar DATAMEA informando o paciente por meio do publicToken/MPI (application/json)
 
         {
             "grant_type": "client_credentials",
@@ -55,17 +46,7 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
             }
         }
 
-+ Response 200 (application/json)
-    + Body
-
-            {
-                "access_token": "4f4ebff54fa5f6120bca11521f22ba23f604f80a",
-                "expires_in": 7200,
-                "token_type": "Bearer",
-                "scope": ""
-            }
-
-+ Request (application/json) Autenticação Utilizada para acessar DATAMEA  
++ Request Quando irá acessar DATAMEA informando o paciente por meio dos dados de identificação (application/json)
 
         {
             "grant_type": "client_credentials",
@@ -100,12 +81,12 @@ Serviço para obtenção do token de acesso que autoriza o uso dos demais servi�
 
 ## Envio de dados clinicos [/api/message]
 
-### Envio de dados clinicos no formato JSON [POST]
+### Envio de dados clinicos [POST]
 
-Serviço para o envio do JSON com os dados de um atendimento clínico de um paciente e transformação desse JSON em HL7.
-O documento JSON informado é o padrão, mas é possivel ter customizaçã ode acordo  com as necessidades do parceiro.
+Serviço para o envio dos dados de um atendimento clínico de um paciente.
+O padrão a ser utilizado no document odeverá ser definido em temp ode projeto, a preferência é por utilizar o padrão HL7 FHIR, mas é possivel utilizar padrão customizado de acordo  com as necessidades do cliente/parceiro.
 
-+ request (application/json)
++ request Dados em padrão JSON customizado. (application/json)
     + Header
     
             Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
@@ -190,7 +171,7 @@ O documento JSON informado é o padrão, mas é possivel ter customizaçã ode a
             }
         
 
-+ request (application/fhir+json)
++ request  Dados em padrão HL7 FHIR. (application/fhir+json)
     + Header
     
             Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
