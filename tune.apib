@@ -27,6 +27,16 @@ Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
 Serviço para obtenção do token de acesso que autoriza o uso dos demais serviços.
 Neste exemplo, autenticação simples usada para acessar APIs
 
+### Tabela de Status
+
+| Code   | Description
+|:-------|---------------
+|01      | Paciente encontrado e com informações clínicas.
+|02      | Paciente encontrado sem informações clínicas.
+|03      | Paciente não cadastrado e não possui consentimento.
+|04      | Mais de um registro encontrado com os dados enviados. 
+|05      | Credenciais inválidas.
+
 + Request Quando irá acessar apis sem necessecidade de informa paciente. (application/json)  
 
         {
@@ -61,9 +71,9 @@ Neste exemplo, autenticação simples usada para acessar APIs
                 "data-nascimento" : "0000-00-00",                
                 "genero" : "M",
                 "end-cidade" : "SÃO PAULO",
-                "end-estado" : "SP"
-                "end-pais": "Brasil"
-                "fone-celular": "11900000000"
+                "end-estado" : "SP",
+                "end-pais": "Brasil",
+                "fone-celular": "11900000000",
                 "email" : "nome@dominio.com"
             }
         }
