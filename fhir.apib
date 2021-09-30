@@ -5,21 +5,6 @@ HOST:  https://fhir.dataopera.com.br/v1/
 
 Este documento tem o objetivo de auxiliar técnicamente como os parceiros devem consumir dados clínicos dos paciente para integração com a plataforma DataOpera por meio do padrão FHIR.
 
-# Autenticação
-
-Utilizamos o **[OAuth](https://oauth.net)** como framework de autorização à API. 
-A autenticação se dá através de credendiais de acesso (id e senha) fornecidas pela DataOpera (enviamos por e-mail)
-que irá gerar um token de acesso com autorização para o uso do serviço.
-
-Com o token de acesso gerado, basta colocar no cabeçalho do HTTP usando Authorization na chamada do serviço Mapping HL7.
-
-```
-Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
-```    
-
-Para ver mais detalhes sobre o serviço de autenticação, consultar documentação em **https://dataopera.docs.apiary.io/#reference/servicos-da-api/autenticacao/autenticacao**
-
-
 ## Consulta de dados clinicos [/_history?Patient.identifier={Patient.identifier}&_since={_since}&_until={_until}]            
 
 ### Consulta de dados clinicos de pacientes [GET]
