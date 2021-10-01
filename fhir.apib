@@ -10,12 +10,12 @@ Este documento tem o objetivo de auxiliar técnicamente como os parceiros devem 
 ### Consulta de dados clinicos de pacientes [GET]
 
 Serviço que consulta os dados clínicos do paciente por meio do Token Público.
-> Regex utilizado para validação dos parametros _since e _until: `?([1-9][0-9]{3}|0[0-9]{3})(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?`
+
 
 + Parameters
     + Patient.identifier (required, string) ...  publicToken/MPI do paciente.
-    + _since (optional, string) ...  Filtro de data inicio, caso não informado será buscado desde o primeiro dado clinico.
-    + _until (optional, string) ...  Filtro de data fim, caso não informado será buscado até o último dado clinico.    
+    + _since (optional, string) ...  Filtro de data inicio, caso não informado será buscado desde o primeiro dado clinico. <br><em>Regex:`?([1-9][0-9]{3}|0[0-9]{3})(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?`</em>
+    + _until (optional, string) ...  Filtro de data fim, caso não informado será buscado até o último dado clinico. <br><em>Regex:`?([1-9][0-9]{3}|0[0-9]{3})(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?`</em>
 
     
 + request (application/fhir+json)
