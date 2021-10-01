@@ -18,7 +18,7 @@ que, no caso de OAuth se faz necessário acessar serviço abaixo para gerar um t
 Com o token de acesso gerado, basta colocar no cabeçalho do HTTP usando Authorization na chamada do endpoint pretendido.
 
 ```
-Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+Authorization: Bearer GENERATED_TOKEN
 ```    
 
 ##### Tabela de Status
@@ -76,7 +76,7 @@ Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
     + Body
 
             {
-                "access_token": "4f4ebff54fa5f6120bca11521f22ba23f604f80a",
+                "access_token": "0000000000000000000000000000000000000",
                 "expires_in": 7200,
                 "token_type": "Bearer",
                 "scope": ""
@@ -93,7 +93,7 @@ O padrão a ser utilizado no document odeverá ser definido em temp ode projeto,
 + request Dados em padrão JSON customizado. (application/json)
     + Header
     
-            Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+            Authorization: Bearer GENERATED_TOKEN
             Accept: application/json
     
     + Body
@@ -178,7 +178,7 @@ O padrão a ser utilizado no document odeverá ser definido em temp ode projeto,
 + request  Dados em padrão HL7 FHIR. (application/fhir+json)
     + Header
     
-            Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+            Authorization: Bearer GENERATED_TOKEN
             Accept: application/json
     
     + Body
@@ -273,7 +273,7 @@ Serviço que consulta o status do consentimento de coleta de dados clínicos do 
 
     + Header
     
-            Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
+            Authorization: Bearer GENERATED_TOKEN
             Accept: application/json
     
     + Body
