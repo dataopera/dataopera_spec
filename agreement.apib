@@ -1,0 +1,45 @@
+## Link de consentimento [/agreementapi.dataopera.com.br]
+
+
+### Geração de link de consentimento [POST]
+
+Ao enviar os dados do paciente é gerada uma URL para que o paciente possa consentir acesso ao médico/parceiro.
+e um public token que servirá para identificação do paciente.
+
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+        
+            {
+                "cliente": "CLIENT_HASH",
+                "data": {
+                    "idSistemaOrigem": "123456",
+                    "nomeCompleto": "Nome Completo",
+                    "dataNascimento": "19620506",
+                    "nomeMae": "Nome Mãe",
+                    "sexo": "F",
+                    "rg": "0000000000",
+                    "cpf": "00000000000",
+                    "cns": "1111111111111",
+                    "passaporte": "XXXXXXXXXXX",
+                    "nascimentoPais": "Brasil",
+                    "residenciaCidade": "São Paulo",
+                    "residenciaUf": "SP",
+                    "residenciaPais": "Brasil",
+                    "contatoEmail": "email@email.com",
+                    "contatoCelular": "11988888888"
+                }
+            }
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "url": "https://agreementhomolog.datamea.com.br/#/22c01%7CztzLPHnmieTH3%2BH7Juu65JmyUd1gUp9g%2Fiy5qJWmrXaznE8dKVqvGdALrS7j51gLiT88vTCHBYDsCso8q90%2BvYG66Ytq9olLeJVY1LOrVeRajYM7SQm2v4GlhMjyqLtjZhcDxlCeiNlvozaHQ1nhuikpWqG3bJawgQVWtc5Za93hP5YdhNHc0T8ccGbmx4URvWXSaCzxrELvoWdwMvd4Szur5Ih8tCTfwovK2pnwmPWcWMXo1lRHBhjamHk0kGX6mNPXnQymP%2BDOB3ilNAgSqvg%2BnP6yaTbiwy1hP2pXtzfUZwk4WJbPQv3pyRvPddFsX4IX%2FL6j3sJVL8x8%2FAuIsQ%3D%3D/22dfc93b-0029-4362-83f2-b6907e4d6389",
+                "publicToken": "PUBLIC_TOKEN_PATIENT"
+            }
