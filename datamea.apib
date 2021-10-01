@@ -2,19 +2,19 @@ FORMAT: 1A
 HOST:  https://datamea.com.br/
 
 
-# Group Consumo do DataMea (webview) 
+## Group Consumo do DataMea (webview) 
 
-## Visualização de Dados Clínicos no DataMea (modo App Embedeed) com autenticação Oauth
+### Visualização de Dados Clínicos no DataMea (modo App Embedeed) com autenticação Oauth
 
 Este modo serve para abrir o DataMea (solução de visualização de dados clínicos) integrado a alguma aplicação sem apresentar o login para o usuário. 
 Primeiramente deve ser realizada autenticação oauth, especificada acima neste documento, informando paciente e profissional logado, após deve ser chamada a aplicação do DataMea informando o token gerado por parâmetro.
 
-### Exemplo de chamada do DataMea
+#### Exemplo de chamada do DataMea
 
 > https://datamea.com.br/index.html?token=dfba7e37d6a24f7b263bde9bc99cd23590844b1d 
 
 
-### Exemplo de imlplementação 
+#### Exemplo de imlplementação 
 
 Para auxiliar na implementação, segue um exemplo em Javascript. 
 Vale lembrar que é somente uma ilustração, cada sistema/linguagem tem suas características e necessidades.
