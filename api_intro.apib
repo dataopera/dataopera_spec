@@ -5,15 +5,5 @@ HOST:  https://tune.dataopera.com.br/
 
 Este documento tem o objetivo de especificar técnicamente como os parceiros devem enviar as mensagens com dados clínicos dos paciente para integração com a plataforma DataOpera.
 
-# Autenticação
 
-Utilizamos o **[OAuth](https://oauth.net)** ou **Basic Authentication** como métodos de autorização à API. 
-A autenticação se dá através de credendiais de acesso (id e senha) fornecidas pela DataOpera (enviamos por e-mail)
-que, no caso de OAuth se faz necessário acessar serviço abaixo para gerar um token de acesso com autorização para o uso do serviços dataopera.
-
-Com o token de acesso gerado, basta colocar no cabeçalho do HTTP usando Authorization na chamada do endpoint pretendido.
-
-```
-Authorization: Bearer 4f4ebff54fa5f6120bca11521f22ba23f604f80a
-```    
 
