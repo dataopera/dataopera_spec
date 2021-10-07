@@ -1,4 +1,4 @@
-## Consulta de dados clinicos [/fhir.dataopera.com.br/v1/?Patient.identifier={Patient.identifier}&Encounter.identifier={Encounter.identifier}&_since={_since}&_until={_until}]            
+## Consulta de dados clinicos [/fhir.dataopera.com.br/v1/?Patient.identifier.value={Patient.identifier.value}&Encounter.identifier.value={Encounter.identifier.value}&_since={_since}&_until={_until}]            
 
 ### Consulta de dados clinicos de pacientes [GET]
 
@@ -6,8 +6,9 @@ Serviço que consulta os dados clínicos do paciente por meio do Token Público.
 
 
 + Parameters
-    + Patient.identifier (required, string) ...  publicToken/MPI do paciente.
-    + Encounter.identifier (optional, string) ...  publicToken/MPI do paciente.
+    + Patient.identifier.value (required, string) ...  publicToken/MPI do paciente.
+    + Encounter.identifier.value (optional, string) ...  Identificado do atendimento clinico.
+    + Encounter.identifier.use (optional, string) ...  Sistema de referencia do identificador de atendimento clinico (official= Sistema origem | usual = Reposistório).
     + _since (optional, string) ...  Filtro de data inicio, caso não informado será buscado desde o primeiro dado clinico. <br><em>Regex:`?([1-9][0-9]{3}|0[0-9]{3})(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?`</em>
     + _until (optional, string) ...  Filtro de data fim, caso não informado será buscado até o último dado clinico. <br><em>Regex:`?([1-9][0-9]{3}|0[0-9]{3})(-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?)?`</em>
 
@@ -32,7 +33,7 @@ Serviço que consulta os dados clínicos do paciente por meio do Token Público.
               "link": [
                 {
                   "relation": "self",
-                  "url": "http://fhir.dataopera.com.br/v1/_history?Patient.identifier=91612d7b-cb3a-4612-b0ad-5d9145936870&_since=2019-02-06&_until=2019-02-07"
+                  "url": "http://fhir.dataopera.com.br/v1/_history?Patient.identifier.value=91612d7b-cb3a-4612-b0ad-5d9145936870&_since=2019-02-06&_until=2019-02-07"
                 }
               ],
               "total": 33,
