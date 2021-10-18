@@ -277,11 +277,6 @@ Serviço que consulta o status do consentimento de coleta de dados clínicos do 
             Authorization: Bearer GENERATED_TOKEN
             Accept: application/json
     
-    + Body
-        
-            {
-                "publicToken": "98322343-1faf-41f5-8c76-9d4584c4b405"
-            }
 
 + Response 200 (application/json)
     + Body
@@ -338,7 +333,7 @@ Serviço que consulta o status do consentimento de coleta de dados clínicos do 
 
 ### Consentimento de Compartilhamento de Dados Clínicos do paciente [POST]
 
-Este endpoint está liberado apenas para parceiros(empresas) que possuem permissão no processo de Consentimento em nome do Paciente, para isso o parceiro se responsábiliza pelo consentimento de compartilhamento dos dados do paciente informado por meio do Token Público.
+Este endpoint está liberado apenas para parceiros (empresas) que possuem permissão no processo de Consentimento em nome do Paciente, para isso o parceiro se responsábiliza pelo consentimento de compartilhamento dos dados do paciente informado por meio do Token Público.
 Para cada consentimento é gerado um certificado digital com os dados da origem do consentimento o qual é válido juridicamente de acordo com as legislações brasileira (LGPD).
 
 Este endpoint está prepara para o modelo de autenticação especificado para o parceiro (OAUTH ou Basic Authentication)
