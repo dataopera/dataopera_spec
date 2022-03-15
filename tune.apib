@@ -260,6 +260,188 @@ O padrão a ser utilizado no document odeverá ser definido em temp ode projeto,
                 "message": "Mensagem processada com sucesso!"
             }
             
+## Envio de dados clinicos [/tune.dataopera.com.br/api/message/{Origem}]
+
+### Envio de dados clinicos [POST]
+
+Serviço para o envio dos dados de um atendimento clínico de um paciente.
+O padrão a ser utilizado no document odeverá ser definido em temp ode projeto, a preferência é por utilizar o padrão HL7 FHIR, mas é possivel utilizar padrão customizado de acordo  com as necessidades do cliente/parceiro.
+
+Este endpoint permite informar o sistema origem da infomração, caso o usuario utilizado para gerar o token de autenticação tenha permissão para isso.
+
+
++ Parameters
+    + Origem (required, string) ...  código do sistema origem das informações.
+
++ request Dados em padrão JSON customizado. (application/json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+    
+            {
+                "message_datetime": "20180501155836",
+                "message_id": "1234567890",
+                "event":{
+                    "recorded_datetime": "20180501155836"
+                },
+                "sistemaOrigem": "DataMea",
+                "paciente":{
+                    "id": "123456",
+                    "nomeCompleto": "Maria da Silva",
+                    "dataNascimento": "19620506",
+                    "sexo": "F",
+                    "nomeSocial": "Maria",
+                    "estadoCivil": "S",
+                    "rg": "222222222",
+                    "cpf": "11111111111",
+                    "cns": "1111111111111",
+                    "passaporte": "XXXXXXXXXXX",
+                    "nacionalidade": "brasileiro",
+                    "paisNascimento": "Brasil",
+                    "municipioNascimento": "São Paulo",
+                    "endereco":{
+                       "logradouro": "Avenida Paulista",
+                       "numero": "1472",
+                       "bairro": "Jardim Paulista",
+                       "cidade": "São Paulo",
+                       "uf": "SP",
+                       "cep": "75000001",
+                       "paisResidencia": "Brasil"
+                    },
+                    "contatos":{
+                        "telefone": "2345678",
+                        "email": "mariadasilva@dataopera.com",
+                        "celular": "11988888888"
+                    }
+                },
+                "profissional":{
+                    "nomeCompleto": "Jose da Silva",
+                    "registroProfissional": "11111",
+                    "conselho": "CRM",
+                    "ufconselho": "SP",
+                    "cbo": "225136",
+                    "cnsprofissional": "123132132"
+                },
+                "estabelecimentoSaude": { 
+                    "nomeFantasia": "Clinica do Jose",
+                    "cnes": "123456789"
+                },
+                "atendimentoClinico": {
+                    "id": "12345678",
+                    "dataHoraAdmissao": "20160923155836",
+                    "dataHoraDesfecho": "20160923155836",
+                    "observacao": "O paciente se queixou de dores de cabeça e dores no corpo.",
+                    "diagnosticos":[{
+                        "terminologia": "CID10",
+                        "codigo": "A90",
+                        "descricao": "Dengue [dengue clássico]"
+                    }],
+                    "procedimentosRealizados":[{
+                        "terminologia": "TUSS",
+                        "codigo": "10101012",
+                        "descricao": "Consultas",
+                        "quantidade": 1
+                    }],
+                    "prescricao":[{
+                        "descricao": "CETOPROFENO 100 MG",
+                        "posologia": "Tomar 2cp por dia"
+                    }],
+                    "financiamento": { 
+                        "descricao": "Particular",
+                        "plano": "",
+                        "carteirinha": ""
+                    }
+                }
+            }
+        
+
++ request  Dados em padrão HL7 FHIR. (application/fhir+json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+    
+            {
+                "resourceType" : "Bundle",
+                "type" : "collection",
+                "entry" : [ 
+                    {
+                        "resource" : {
+                            "resourceType" : "Patient",
+                            "id" : "1234",
+                            "identifier" : [ 
+                                {
+                                    "use" : "official",
+                                    "type" : {
+                                        "text" : "CPF"
+                                    },
+                                    "value" : "00000000000"
+                                }
+                            ],
+                            "name" : [ 
+                                {
+                                    "use" : "official",
+                                    "family" : "EXEMPLO",
+                                    "given" : [ 
+                                        "PACIENTE"
+                                    ]
+                                }
+                            ],
+                            "gender" : "male",
+                            "birthDate" : "1981-01-09"
+                        }
+                    }, 
+                    {
+                        "resource" : {
+                            "resourceType" : "AllergyIntolerance",
+                            "id" : "2348|46",
+                            "identifier" : [ 
+                                {
+                                    "value" : "2348|46"
+                                }
+                            ],
+                            "patient" : {
+                                "reference" : "Patient/1234"
+                            },
+                            "reaction" : [ 
+                                {
+                                    "substance" : {
+                                        "coding" : [ 
+                                            {
+                                                "code" : "46",
+                                                "display" : "Castanhas"
+                                            }
+                                        ]
+                                    },
+                                    "manifestation" : [ 
+                                        {
+                                            "coding" : [ 
+                                                {
+                                                    "code" : "2348|46",
+                                                    "display" : "Descriçao da reação"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        
++ Response 200 (application/json)
+
+            {
+                "status": "ok",
+                "message": "Mensagem processada com sucesso!"
+            }
+            
             
 
 ## Consentimento do Paciente [/tune.dataopera.com.br/api/agreement/consent]
