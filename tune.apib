@@ -797,9 +797,9 @@ Serviço que anonimiza os dados clínicos do paciente informado por meio do Toke
             }
 
 
-## Consentimento de Acesso a dados [/tune.dataopera.com.br/api/consent]
+## Consentimento de Acesso a dados a Organizações Parceiras [/tune.dataopera.com.br/api/consent]
 
-### Consentimento de Acesso a Dados Clínicos do Paciente [POST]
+### Consentimento de Acesso a Dados Clínicos do Paciente a Organizações Parceiras [POST]
 
 Serviço que possibilita dar permissão de acesso aos dados clínicos do paciente a organização parceiras. 
 Para isso é utilizado o Resource Consent informando o paciente (patient), organização que esta concedento (organization[0].reference) permissão (provision.type = [allo/deny]), organização parceira (provision.actor[0].reference.reference) e identificador do atendimento (provision.data[0].reference.reference).
