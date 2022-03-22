@@ -735,4 +735,167 @@ Este endpoint está prepara para o modelo de autenticação especificado para o 
             }
 
                         
+
+## Anonimização do Paciente [/tune.dataopera.com.br/api/patient/anonymize]
+
+### Anonimização dos Dados Clínicos do Paciente [POST]
+
+Serviço que anonimiza os dados clínicos do paciente informado por meio do Token Público contido no campo id do resource Patient.
+
+        
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+            {
+                "resourceType": "Patient",
+                "id": "a31db1e2-16f9-1df8-a717-7fc9020f19e1",
+                "identifier": [
+                    {
+                        "use": "official",
+                        "type": {
+                            "text": "CPF"
+                        },
+                        "value": "0000000000000"
+                    }
+                ],
+                "name": [
+                    {
+                        "use": "official",
+                        "family": "LÍSIAS SALOMÃO",
+                        "given": [
+                            "PAULO"
+                        ]
+                    }
+                ],
+                "gender": "male",
+                "birthDate": "1962-02-26"
+            }
+    
+
++ Response 200 (application/json)
+    + Body
+
+            true
+
++ Response 401 (application/json)
+    + Body
+
+            "Não autorizado"
+            
++ Response 406 (application/json)
+    + Body
+
+            {
+                "status": {
+                    "code": "401"
+                },
+                "details": "Token Inválido."
+            }
+
+
+## Consentimento de Acesso a dados [/tune.dataopera.com.br/api/consent]
+
+### Consentimento de Acesso a Dados Clínicos do Paciente [POST]
+
+Serviço que possibilita dar permissão de acesso aos dados clínicos do paciente a organização parceiras. 
+Para isso é utilizado o Resource Consent informando o paciente (patient), organização que esta concedento (organization[0].reference) permissão (provision.type = [allo/deny]), organização parceira (provision.actor[0].reference.reference) e identificador do atendimento (provision.data[0].reference.reference).
+O identificador da Organização é o login de autenticação no DataOpera.
+        
++ request (application/json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+            {
+  "resourceType": "Consent",
+  "id": "consent-example",  
+  "status": "active",
+  "scope": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/consentscope",
+        "code": "patient-privacy"
+      }
+    ]
+  },
+  "patient": {
+    "reference": "Patient/a11db0e1-16f9-1d18-a721-1fc9020f69e6",
+    "display": "Nome do paciente"
+  },
+  "dateTime": "2022-03-18",
+  "organization": [
+    {
+      "reference": "Organization/XX-HOMOL"
+    }
+  ],
+  "sourceAttachment": {
+    "title": "The terms of the consent in lawyer speak."
+  },
+  "policyRule": {
+    "coding": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+        "code": "OPTOUT"
+      }
+    ]
+  },
+  "provision": {
+    "type": "allow",
+    "actor": [
+      {
+        "role": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/v3-ParticipationType",
+              "code": "CST"
+            }
+          ]
+        },
+        "reference": {
+          "reference": "Organization/PARTNER-XX-HOMOL"
+        }
+      }
+    ],
+    "purpose": [
+      {
+        "system": "http://terminology.hl7.org/CodeSystem/v3-ActReason",
+        "code": "ETREAT"
+      }
+    ],
+    "data": [
+            {
+                "reference": {
+                    "reference": "Encounter/123456"
+                }
+            }
+        ]
+  }
+}
+    
+
++ Response 200 (application/json)
+    + Body
+    
+            true
+
++ Response 401 (application/json)
+    + Body
+
+            "Não autorizado"
+            
++ Response 406 (application/json)
+    + Body
+
+            {
+                "status": {
+                    "code": "401"
+                },
+                "details": "Token Inválido."
+            }
         
