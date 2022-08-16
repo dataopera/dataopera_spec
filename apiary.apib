@@ -101,6 +101,83 @@ Authorization: Bearer GENERATED_TOKEN
 Serviço para o envio dos dados de um atendimento clínico de um paciente.
 O padrão a ser utilizado no document odeverá ser definido em temp ode projeto, a preferência é por utilizar o padrão HL7 FHIR (https://www.dataopera.com.br/fhir-guide/artifacts.html), mas é possivel utilizar padrão customizado de acordo  com as necessidades do cliente/parceiro.
 
++ request  Dados em padrão HL7 FHIR (https://www.dataopera.com.br/fhir-guide/artifacts.html). (application/fhir+json)
+    + Header
+    
+            Authorization: Bearer GENERATED_TOKEN
+            Accept: application/json
+    
+    + Body
+    
+            {
+                "resourceType" : "Bundle",
+                "type" : "collection",
+                "entry" : [ 
+                    {
+                        "resource" : {
+                            "resourceType" : "Patient",
+                            "id" : "1234",
+                            "identifier" : [ 
+                                {
+                                    "use" : "official",
+                                    "type" : {
+                                        "text" : "CPF"
+                                    },
+                                    "value" : "00000000000"
+                                }
+                            ],
+                            "name" : [ 
+                                {
+                                    "use" : "official",
+                                    "family" : "EXEMPLO",
+                                    "given" : [ 
+                                        "PACIENTE"
+                                    ]
+                                }
+                            ],
+                            "gender" : "male",
+                            "birthDate" : "1981-01-09"
+                        }
+                    }, 
+                    {
+                        "resource" : {
+                            "resourceType" : "AllergyIntolerance",
+                            "id" : "2348|46",
+                            "identifier" : [ 
+                                {
+                                    "value" : "2348|46"
+                                }
+                            ],
+                            "patient" : {
+                                "reference" : "Patient/1234"
+                            },
+                            "reaction" : [ 
+                                {
+                                    "substance" : {
+                                        "coding" : [ 
+                                            {
+                                                "code" : "46",
+                                                "display" : "Castanhas"
+                                            }
+                                        ]
+                                    },
+                                    "manifestation" : [ 
+                                        {
+                                            "coding" : [ 
+                                                {
+                                                    "code" : "2348|46",
+                                                    "display" : "Descriçao da reação"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+
 + request Dados em padrão JSON customizado. (application/json)
     + Header
     
@@ -186,82 +263,7 @@ O padrão a ser utilizado no document odeverá ser definido em temp ode projeto,
             }
         
 
-+ request  Dados em padrão HL7 FHIR (https://www.dataopera.com.br/fhir-guide/artifacts.html). (application/fhir+json)
-    + Header
-    
-            Authorization: Bearer GENERATED_TOKEN
-            Accept: application/json
-    
-    + Body
-    
-            {
-                "resourceType" : "Bundle",
-                "type" : "collection",
-                "entry" : [ 
-                    {
-                        "resource" : {
-                            "resourceType" : "Patient",
-                            "id" : "1234",
-                            "identifier" : [ 
-                                {
-                                    "use" : "official",
-                                    "type" : {
-                                        "text" : "CPF"
-                                    },
-                                    "value" : "00000000000"
-                                }
-                            ],
-                            "name" : [ 
-                                {
-                                    "use" : "official",
-                                    "family" : "EXEMPLO",
-                                    "given" : [ 
-                                        "PACIENTE"
-                                    ]
-                                }
-                            ],
-                            "gender" : "male",
-                            "birthDate" : "1981-01-09"
-                        }
-                    }, 
-                    {
-                        "resource" : {
-                            "resourceType" : "AllergyIntolerance",
-                            "id" : "2348|46",
-                            "identifier" : [ 
-                                {
-                                    "value" : "2348|46"
-                                }
-                            ],
-                            "patient" : {
-                                "reference" : "Patient/1234"
-                            },
-                            "reaction" : [ 
-                                {
-                                    "substance" : {
-                                        "coding" : [ 
-                                            {
-                                                "code" : "46",
-                                                "display" : "Castanhas"
-                                            }
-                                        ]
-                                    },
-                                    "manifestation" : [ 
-                                        {
-                                            "coding" : [ 
-                                                {
-                                                    "code" : "2348|46",
-                                                    "display" : "Descriçao da reação"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                ]
-            }
+
         
 + Response 200 (application/json)
 
