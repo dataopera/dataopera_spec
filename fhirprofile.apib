@@ -1,6 +1,24 @@
-# Group Especificação de perfil de recursos de dados clinicos
+# Group Especificação de perfil de dados
 
 Para fins de entendimento, segue definição de alguns recursos FHIR utilizados em nosso perfil de interoperabilidade.
 A definição de todos os conjuntos de dados deve ser elaborada durante a definição do CMD (conjunto minimo de dados) no processo do projeto.
 Lembrando que a documentação oficial do HL7 FHIR pode ser acessada no site oficial do  **[HL7 FHIR](https://hl7.org/fhir/)**.
+
+## Recurso Patient (Paciente)
+
+Define informações sobre um paciente, como nome, data de nascimento, gênero e identificadores. Essencial para o registro e gerenciamento de dados clínicos do paciente.
+
+
+### Definição
+
+| Informação | Descrição
+|:-----------|---------------
+|id 	       | Código de Identificação do Paciente.
+|identifier  | Identificadores do paciente, como CPF, RG e CNS.
+|name 	     | Nome do paciente.
+|gender 	   | Gênero do paciente.
+|birthDate   | Data de nascimento do paciente.
+|telecom     | Informações de contato, como telefone e e-mail.
+|address     | Endereço do paciente.
+|extension   | Extensões adicionais, como raça (terminologia do IBGE para raça) e nome da mãe.
 
