@@ -112,3 +112,162 @@ Define informações sobre um paciente, como nome, data de nascimento, gênero e
     }
 }
 ```
+
+
+## Recurso Organization (Organização)
+
+Descreve uma organização de saúde, incluindo nome, tipo e identificadores. Usado para representar hospitais, clínicas e outras entidades de saúde.
+
+
+### Definição
+
+| Informação | Descrição
+|:-----------|---------------
+|identifier  | Identificadores da organização, como CNPJ.
+|name        | Nome da organização.
+
+### Exemplo
+
+```
+{
+    "fullUrl": "urn:uuid:77aec69c-847c-4d2d-93d4-5339384eb675",
+    "resource": {
+        "resourceType": "Organization",
+        "identifier": [
+            {
+                "use": "official",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/id-origin",
+                "value": "HOSPDTO"
+            },
+            {
+                "use": "official",
+                "system": "http://gov.cnpj",
+                "value": "84576642000123"
+            }
+        ],
+        "name": "Hospital DataOpera São Paulo"
+    }
+}
+```
+
+
+##	Recurso Location (Localização)
+
+Define uma unidade ou setor dentro de uma organização de saúde, fornecendo detalhes sobre o endereço e outras informações de contato.
+
+### Definição
+
+| Informação | Descrição
+|:-----------|---------------
+|identifier  | Identificador único do local
+|name        | Nome do local
+
+### Exemplo
+
+```
+{
+    "fullUrl": "urn:uuid:9acd3d2a-973f-4405-8091-805cc0b37c5c",
+    "resource": {
+        "resourceType": "Location",
+        "identifier": [
+            {
+                "use": "official",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/id-origin",
+                "value": "HOSPDTOSAUDE"
+            }
+        ],
+        "name": "Hospital DataOpera São Paulo Unidade Saúde"
+    }
+}
+```
+
+##	Recurso Practitioner (Profissional)
+
+Contém informações sobre profissionais de saúde, como nome, especialidade e identificadores. Fundamental para a identificação e atribuição de responsabilidades.
+
+### Definição
+
+| Informação   | Descrição
+|:-------------|---------------
+|identifier    | Identificadores do profissional, como CPF, CNES, etc
+|name          | Nome do profissional
+|gender        | Gênero do profissional
+|birthDate     | Data de nascimento do profissional
+|active        | Indica se o profissional está ativo
+|qualification | Qualificação do profissional, como especialidade (terminologia SNOMED).
+|telecom       | Informações de contato, como telefone
+
+### Exemplo
+
+```
+{
+    "fullUrl": "urn:uuid:0a8de3da-4457-4425-b3c0-c2fa338e6360",
+    "resource": {
+        "resourceType": "Practitioner",
+        "id": "4661690",
+        "identifier": [
+            {
+                "use": "usual",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/id-origin",
+                "value": "4661690"
+            },
+            {
+                "use": "official",
+                "system": "http://gov.cpf",
+                "value": "23356103849"
+            },
+            {
+                "use": "official",
+                "system": "http://gov.cnes",
+                "value": "2080575"
+            },
+            {
+                "use": "official",
+                "system": "http://cfm.org.br",
+                "value": "197586-SP"
+            }
+        ],
+        "name": [
+            {
+                "use": "official",
+                "family": "João da Silva"
+            }
+        ],
+        "gender": "male",
+        "birthDate": "1993-10-12",
+        "active": true,
+        "qualification": [
+            {
+                "code": {
+                    "coding": [
+                        {
+                            "system": "https://terminologia.dataopera.com.br/fhir/CodeSystem/snomed",
+                            "code": "41672002",
+                            "display": "Pulmonologist"
+                        }
+                    ]
+                }
+            }
+        ],
+        "telecom": [
+            {
+                "system": "phone",
+                "value": "998387717"
+            }
+        ]
+    }
+}
+```
+
+##	Recurso Encounter (Atendimento)
+
+Registra informações sobre um encontro entre um paciente e um profissional de saúde, incluindo data, motivo, local e participantes.
+
+##	Recurso Condition (Condição)
+
+Utilizado para definir hipóteses diagnósticas ou condições de saúde de um paciente, como doenças, lesões ou problemas de saúde.
+
+##	Recurso ServiceRequest (Solicitação de Serviço)
+
+Define solicitações de serviços de saúde, como exames laboratoriais, procedimentos ou terapias, incluindo detalhes sobre o serviço solicitado e o paciente envolvido.
+
