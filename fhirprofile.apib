@@ -11,14 +11,104 @@ Define informações sobre um paciente, como nome, data de nascimento, gênero e
 
 ### Definição
 
-| Informação | Descrição
-|:-----------|---------------
-|id 	       | Código de Identificação do Paciente.
-|identifier  | Identificadores do paciente, como CPF, RG e CNS.
-|name 	     | Nome do paciente.
-|gender 	   | Gênero do paciente.
-|birthDate   | Data de nascimento do paciente.
-|telecom     | Informações de contato, como telefone e e-mail.
-|address     | Endereço do paciente.
-|extension   | Extensões adicionais, como raça (terminologia do IBGE para raça) e nome da mãe.
+| Informação   | Descrição
+|:-------------|---------------
+|id            | Código de Identificação do Paciente.
+|identifier    | Identificadores do paciente, como CPF, RG e CNS.
+|name          | Nome do paciente.
+|gender        | Gênero do paciente.
+|birthDate     | Data de nascimento do paciente.
+|telecom       | Informações de contato, como telefone e e-mail.
+|address       | Endereço do paciente.
+|extension     | Extensões adicionais, como raça (terminologia do IBGE para raça) e nome da mãe.
 
+### Exemplo 
+
+```
+{
+    "fullUrl": "urn:uuid:de1cf7d3-7690-41c1-b56e-89a92bb94600",
+    "resource": {
+        "resourceType": "Patient",
+        "id": "5180269",
+        "identifier": [
+            {
+                "use": "official",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/id-origin",
+                "value": "5180269"
+            },
+            {
+                "use": "official",
+                "system": "http://gov.cpf",
+                "value": "23356103849"
+            },
+            {
+                "use": "official",
+                "system": "http://gov.rg",
+                "value": "334648166"
+            },
+            {
+                "use": "official",
+                "system": "http://gov.cns",
+                "value": "205162433390004"
+            }
+        ],
+        "name": [
+            {
+                "family": "José",
+                "given": [
+                    "Couves"
+                ]
+            }
+        ],
+        "extension": [
+            {
+                "url": "https://api-fhir-dev.dataopera.com.br/fhir/StructureDefinition/patient-mother-name",
+                "valueString": "Maria das Couves"
+            },
+            {
+                "url": "https://terminologia.dataopera.com.br/fhir/CodeSystem/ibge",
+                "valueCodeableConcept": {
+                    "coding": [
+                        {
+                            "system": "https://terminologia.dataopera.com.br/fhir/ValueSet/race",
+                            "code": "01",
+                            "display": "Branca"
+                        }
+                    ],
+                    "text": "Branca"
+                }
+            }
+        ],
+        "gender": "male",
+        "birthDate": "1983-01-22",
+        "telecom": [
+            {
+                "system": "phone",
+                "value": "11994321530",
+                "use": "home"
+            },
+            {
+                "system": "phone",
+                "value": "11994321530",
+                "use": "mobile"
+            },
+            {
+                "system": "email",
+                "value": "anthony.gustavo.assuncao@gmail.com",
+                "use": "work"
+            }
+        ],
+        "address": [
+            {
+                "line": [
+                    "Rua Conselheiro Crispiniano, 344, Casa"
+                ],
+                "city": "São Paulo",
+                "district": "Centro",
+                "state": "SP",
+                "postalCode": "01037908"
+            }
+        ]
+    }
+}
+```
