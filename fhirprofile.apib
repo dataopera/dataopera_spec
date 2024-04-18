@@ -262,11 +262,199 @@ Contém informações sobre profissionais de saúde, como nome, especialidade e 
 
 Registra informações sobre um encontro entre um paciente e um profissional de saúde, incluindo data, motivo, local e participantes.
 
+### Definição
+
+| Informação    | Descrição
+|:--------------|---------------
+|id             |Identificador único do atendimento no sistema
+|identifier     |Identificadores do atendimento, como número do prontuário
+|status         |Status do atendimento
+|class          |Classe do atendimento, como emergência
+|subject        |Referência à organização pagadora
+|participant    |Participantes do atendimento, como o profissional.
+|period         |Período do atendimento
+|serviceProvider|Referência à organização prestadora do serviço
+|location       |Localização do atendimento, referência ao recurso Location
+
+### Exemplo
+
+```
+{
+    "fullUrl": "urn:uuid:0bfc06e1-f18a-4df8-b9b4-86c913f288d9",
+    "resource": {
+        "resourceType": "Encounter",
+        "id": "16622043",
+        "identifier": [
+            {
+                "use": "usual",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/id-origin",
+                "value": "16622043"
+            },
+            {
+                "use": "usual",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/medical-record-number",
+                "value": "2360204190212"
+            }
+        ],
+        "status": "finished",
+        "class": {
+            "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode",
+            "code": "EMER",
+            "display": "emergency"
+        },
+        "subject": {
+            "reference": "urn:uuid:de1cf7d3-7690-41c1-b56e-89a92bb94600",
+            "type": "Patient"
+        },
+        "participant": [
+            {
+                "individual": {
+                    "reference": "urn:uuid:0a8de3da-4457-4425-b3c0-c2fa338e6360",
+                    "type": "Practitioner"
+                }
+            }
+        ],
+        "period": {
+            "start": "2023-12-04T19:58:38Z",
+            "end": "2023-12-04T21:04:30Z"
+        },
+        "serviceProvider": {
+            "reference": "urn:uuid:77aec69c-847c-4d2d-93d4-5339384eb675",
+            "type": "Organization"
+        },
+        "location": [
+            {
+                "location": {
+                    "reference": "urn:uuid:9acd3d2a-973f-4405-8091-805cc0b37c5c",
+                    "type": "Location"
+                }
+            }
+        ]
+    }
+}
+```
+
 ## Recurso Condition (Condição)
 
 Utilizado para definir hipóteses diagnósticas ou condições de saúde de um paciente, como doenças, lesões ou problemas de saúde.
+
+### Definição
+
+| Informação    | Descrição
+|:--------------|---------------
+|subject        | Referência ao paciente.
+|encounter      | Referência ao atendimento.
+|asserter       | Referência ao profissional que registrou a condição.
+|code           | Código da condição, com codificação e texto
+
+### Exemplo
+
+```
+{
+    "fullUrl": "urn:uuid:9a1715fb-1afb-44d6-8650-9aa3464f2046",
+    "resource": {
+        "resourceType": "Condition",
+        "subject": {
+            "reference": "urn:uuid:de1cf7d3-7690-41c1-b56e-89a92bb94600",
+            "type": "Patient"
+        },
+        "encounter": {
+            "reference": "urn:uuid:0bfc06e1-f18a-4df8-b9b4-86c913f288d9",
+            "type": "Encounter"
+        },
+        "asserter": {
+            "reference": "urn:uuid:0a8de3da-4457-4425-b3c0-c2fa338e6360",
+            "type": "Practitioner"
+        },
+        "code": {
+            "coding": [
+                {
+                    "system": "https://terminologia.dataopera.com.br/fhir/CodeSystem/cid10",
+                    "code": "39065001",
+                    "display": "Burn of ear"
+                }
+            ],
+            "text": "Burnt Ear"
+        }
+    }
+
+```
 
 ## Recurso ServiceRequest (Solicitação de Serviço)
 
 Define solicitações de serviços de saúde, como exames laboratoriais, procedimentos ou terapias, incluindo detalhes sobre o serviço solicitado e o paciente envolvido.
 
+### Definição
+
+| Informação         | Descrição
+|:-------------------|---------------
+|id                  |Identificador único da solicitação no sistema.
+|intent              |Intenção da solicitação, como ordem.
+|identifier          |Identificadores da solicitação.
+|status              |Status da solicitação.
+|authoredOn          |Data de autorização da solicitação.
+|encounter           |Referência ao atendimento.
+|subject             |Referência ao atendimento.
+|code                |Código da solicitação, com codificação e texto
+|patientInstruction  |Instruções para o paciente
+|note                |Notas adicionais
+|reasonReference     |Referência à condição que motivou a solicitação.
+|extension           |Extensões adicionais, como número da conta.
+
+### Exemplo
+
+```
+{
+    "fullUrl": "urn:uuid:b95cf72d-8aa0-47b4-977b-38a180c6cc2a",
+    "resource": {
+        "resourceType": "ServiceRequest",
+        "id": "8213492",
+        "intent": "order",
+        "identifier": [
+            {
+                "use": "usual",
+                "system": "https://api-fhir-dev.dataopera.com.br/fhir/NamingSystem/id-origin",
+                "value": "8213492"
+            }
+        ],
+        "status": "completed",
+        "authoredOn": "2023-01-30T11:28:00Z",
+        "encounter": {
+            "reference": "urn:uuid:0bfc06e1-f18a-4df8-b9b4-86c913f288d9",
+            "type": "Encounter"
+        },
+        "subject": {
+            "reference": "urn:uuid:de1cf7d3-7690-41c1-b56e-89a92bb94600",
+            "type": "Patient"
+        },
+        "code": {
+            "coding": [
+                {
+                    "system": "https://terminologia.dataopera.com.br/fhir/CodeSystem/tuss",
+                    "code": "26436-6",
+                    "display": "Complete blood count (hemogram) panel - Blood by Automated count"
+                }
+            ],
+            "text": "Complete blood count (hemogram) panel"
+        },
+        "patientInstruction": "Start with 30kg 10-15 repetitions for three sets and increase in increments of 5kg when you feel ready",
+        "note": [
+            {
+                "text": "patient is afraid of needles"
+            }
+        ],
+        "reasonReference": [
+            {
+                "reference": "urn:uuid:9a1715fb-1afb-44d6-8650-9aa3464f2046",
+                "type": "Condition"
+            }
+        ],
+        "extension": [
+            {
+                "url": "https://api-fhir-dev.dataopera.com.br/fhir/StructureDefinition/account-number",
+                "valueString": "925163443391"
+            }
+        ]
+    }
+}
+```
