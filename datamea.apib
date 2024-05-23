@@ -1,95 +1,603 @@
-# Group DataMea - Visualizador de dados clinicos
+FORMAT: 1A
+HOST: https://man-api.herokuapp.com/
 
-## Visualização de Dados Clínicos no DataMea (modo App Embedeed) com autenticação Oauth
+# DTO - DataMea - Visualizador de dados clinicos
 
-Este modo serve para abrir o DataMea (solução de visualização de dados clínicos) integrado a alguma aplicação sem apresentar o login para o usuário. 
-Primeiramente deve ser realizada autenticação oauth, especificada acima neste documento, informando paciente e profissional logado, após deve ser chamada a aplicação do DataMea informando o token gerado por parâmetro.
+**DataMea** é uma plataforma complexa de interoperabilidade que contempla as fases de coleta, armazenamento, visualização dos dados clínicos do paciente e disponibilização de informações anonimizadas da base de dados com uso de IA.  
+
+#####Dados Cadastrais do Paciente 
+O Cabeçalho do DataMea traz informações de identificação do paciente, onde foi trabalhado no método MPI - Master Patient Index, fazendo com que não haja duplicação de indivíduos e as informações sejam pertinentes a um único paciente. 
+
+#####Nome Completo
+- Descrição: Identificação oficial do paciente, composta por nome, sobrenome e patronímico (se houver).
+
+- Importância: Essencial para a correta identificação do paciente em registros, prontuários e outros documentos médicos.
+
+#####Nome Social
+- Descrição: Nome pelo qual o paciente prefere ser chamado, podendo divergir do nome completo.
+
+- Importância: Demonstra respeito à individualidade e identidade do paciente, promovendo uma comunicação mais humanizada.
+
+#####Tipo Sanguíneo
+- Descrição: Classificação do sangue do paciente, indicando os antígenos presentes na superfície dos glóbulos vermelhos.
+
+- Importância: Fundamental em casos de transfusões de sangue, transplantes e outras intervenções médicas que envolvam sangue.
+
+#####Idade
+- Descrição: Idade cronológica do paciente, calculada a partir da data de nascimento.
+
+- Importância: Auxilia na avaliação clínica, diagnóstico e tratamento de doenças, considerando as características e necessidades específicas de cada faixa etária.
+
+#####RG
+- Descrição: Número de Registro Geral de Identidade, documento oficial de identificação civil no Brasil.
+
+- Importância: Permite a verificação da identidade do paciente em diversos contextos como por exemplo em consultas médicas.
+
+#####Religião
+- Descrição: Crença religiosa professada pelo paciente, que pode influenciar seus valores, crenças e práticas.
+
+- Importância: Permite que o profissional de saúde compreenda melhor o paciente e suas perspectivas de vida, possibilitando um atendimento mais holístico e sensível.
+
+#####Sexo
+- Descrição: Sexo biológico do paciente, determinado por características cromossômicas, anatômicas e fisiológicas.
+
+- Importância: Fundamental para o diagnóstico, tratamento e acompanhamento de diversas doenças, além de influenciar na escolha de medicamentos e procedimentos médicos.
+
+#####CPF
+- Descrição: Número do Cadastro de Pessoa Física (CPF), documento oficial de identificação fiscal no Brasil.
+
+- Importância: Permite a identificação do paciente em diversos contextos, como consultas médicas, compras e declarações fiscais.
+
+#####Escolaridade
+- Descrição: Nível de escolaridade do paciente, que pode influenciar na compreensão de informações e na adesão ao tratamento.
+
+- Importância: Permite que o profissional de saúde adapte a comunicação e o plano de cuidados às necessidades e características do paciente.
+
+#####Raça/Cor
+- Descrição: Autodeclaração do paciente sobre sua raça e cor, elementos que compõem sua identidade étnico-racial.
+
+- Importância: Permite que o profissional de saúde compreenda as vivências e necessidades do paciente em um contexto social marcado por desigualdades raciais, promovendo um atendimento mais equânime e justo.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/cabecalho.png?raw=true)
+
+##Sumário
+O Sumário é uma apresentação de dados do paciente de forma organizadas em Cards específicos. Cada dado apresentado faz parte de um **Conjunto Mínimo de Dados**, também denominado como **CMD**, que sua organização definiu com relevante interoperabilizar com outras instituições de saúde.  Vale apresentar que as informações são apresentadas de forma agrupada e orientada de forma cronológica. 
+
+Descrições dos campos:
+
+- **PRONTO ATENDIMENTO**: Este campo mostra o número de vezes que o paciente foi atendido no pronto atendimento.
+
+- **AMBULATÓRIO E OUTROS**: Este campo é um recurso importante para o acompanhamento do histórico médico do paciente e as tomadas de decisões sobre o cuidado da saúde. 
+
+- **SADT**: Este campo mostra o número de vezes que o paciente foi atendido pelo Serviço de Atendimento Domiciliar (SADT).
+
+- **INTERNAÇÃO**: Este campo, é possível visualizar o número que o paciente teve internações em seu histórico.
+
+- **REGULAÇÃO**: Este campo mostra o número de vezes que o paciente foi regulado para internação hospitalar. 
+
+- **PROCEDIMENTOS**: Este campo mostra o número de procedimentos que foram realizados para o paciente.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/sumario.png?raw=true)
+
+##Linha do Tempo
+A Linha do Tempo apresenta ao profissional assistente dados diferentes, mas pertinente a um atendimento específico. A navegar na linha do tempo, você irá ver todos os atendimentos interoperabilizados do paciente em blocos distintos, agrupando todas as informações de um atendimento. 
+
+Descrições dos campos:
+
+- **Data e Hora**: A data e hora do evento são cruciais para acompanhar a progressão do atendimento do paciente e identificar possíveis atrasos ou gargalos no processo.
+
+- **Título**: O título do evento fornece uma visão geral rápida do que aconteceu, facilitando a consulta da linha do tempo.
+
+- **Descrição**: A descrição do evento fornece detalhes importantes sobre o que aconteceu, como os sintomas do paciente, os procedimentos realizados e os resultados obtidos.
+
+- **Tipo de Evento**: O tipo de evento permite categorizar os eventos e facilitar a análise de dados, como a quantidade de consultas realizadas ou a frequência de exames específicos.
+
+- **Local**: O local do evento pode ser útil para identificar em qual setor do hospital o paciente foi atendido.
+
+- **Profissional**: O profissional que atendeu o paciente pode ser relevante para acompanhar o histórico do atendimento e identificar os responsáveis por cada etapa.
+
+- **Exames Solicitados**: A lista de exames solicitados fornece informações sobre os exames que o paciente precisa realizar para o diagnóstico e tratamento de sua condição.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/LinhadoTempo.png?raw=true)
+
+##Histórico do Paciente
+Se estiver aparecendo para você o Histórico do Paciente, sua organização fez a aquisição do produto DataHAL. Este histórico vinculado ao Sumário DataMea é uma sumarização da vida clínica registrada do paciente, apresentada de forma mais rápida e em linguagem natural por meio de Inteligência Artificial. 
+
+Descrições dos campos:
+
+- **Informações demográficas**: Nome do paciente, data de nascimento, sexo, endereço, etc.
+
+- **Histórico médico**: Doenças, cirurgias, alergias e medicamentos passados do paciente.
+
+- **Histórico familiar**: Antecedentes médicos da família do paciente, como histórico de doenças cardíacas, câncer ou diabetes.
+
+- **Histórico social**: Hábitos de vida do paciente, como tabagismo, consumo de álcool e uso de drogas.
+
+- **Medicações atuais**: Lista de todos os medicamentos que o paciente está tomando no momento.
+
+- **Alergias**: Lista de todas as substâncias às quais o paciente é alérgico.
+
+- **Imunizações**: Lista de todas as imunizações que o paciente recebeu.
+
+- **Internizações**: Lista de todas as vezes que o paciente foi internado no hospital.
+
+- **Cirurgias**: Lista de todas as cirurgias que o paciente realizou.
+
+- **Procedimentos**: Lista de todos os procedimentos que o paciente realizou, como raios-X, tomografias computadorizadas e ressonâncias magnéticas.
+
+- **Resultados laboratoriais e Imagens**: Lista de todos os resultados laboratoriais e de imagens que o paciente obteve.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/HistoricodoPaciente.png?raw=true)
+
+##DataHal
+O Campo CHAT, sigla para Contexto Histórico de Atendimento Transcrito, é uma ferramenta inovadora que auxilia profissionais da saúde na tomada de decisões mais precisas e eficientes. Através do Campo CHAT, é possível realizar perguntas sobre o histórico médico de um paciente e obter respostas instantâneas baseadas em seus registros eletrônicos de saúde (prontuários eletrônicos).
+
+**Como funciona o Campo CHAT?**
+
+O Campo CHAT funciona por meio da análise de inteligência artificial (IA) que processa e organiza as informações contidas no prontuário eletrônico do paciente. Ao realizar uma pergunta no Campo CHAT, a IA busca por termos relevantes em todo o histórico do paciente, como diagnósticos, medicamentos, procedimentos, alergias, consultas anteriores, entre outros.
+
+**Quais são os benefícios do Campo CHAT?**
+
+- O Campo CHAT oferece diversos benefícios para profissionais da saúde, como:
+
+- **Maior agilidade e eficiência no atendimento**: O Campo CHAT permite que os profissionais da saúde obtenham informações relevantes sobre o histórico do paciente de forma rápida e fácil, sem a necessidade de consultar manualmente o prontuário eletrônico. Isso otimiza o tempo de atendimento e permite que os profissionais se concentrem mais no paciente.
+
+- **Melhora na qualidade do cuidado**: O acesso rápido e preciso às informações do histórico do paciente permite que os profissionais da saúde tomem decisões mais bem informadas sobre o diagnóstico, tratamento e acompanhamento do paciente. Isso contribui para a melhora na qualidade do cuidado e na segurança do paciente.
+
+- **Redução de erros médicos**: O Campo CHAT pode ajudar a reduzir erros médicos ao fornecer aos profissionais da saúde uma visão completa do histórico do paciente, incluindo alergias, medicamentos em uso e interações medicamentosas.
+
+- **Maior satisfação do paciente**: O Campo CHAT permite que os profissionais da saúde ofereçam um atendimento mais personalizado e centrado no paciente, o que pode aumentar a satisfação do paciente com o cuidado recebido.
+
+Em resumo, o Campo CHAT é uma ferramenta valiosa que pode auxiliar profissionais da saúde na tomada de decisões mais precisas e eficientes, na melhoria da qualidade do cuidado e na redução de erros médicos. Além disso, o Campo CHAT pode contribuir para aumentar a satisfação do paciente com o atendimento recebido.
+
+- Observação: É importante ressaltar que o Campo CHAT é uma ferramenta complementar e não deve substituir a avaliação clínica do profissional da saúde.
+
+**Lembrando que o DataHal é um produto comercializado à parte que realiza integração com DataMea, caso seja contratado pela sua empresa essa função estará disponível para utilização.**
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DataHal.png?raw=true)
+
+##Últimos Atendimentos:
+
+Este card apresenta de forma resumida informações primárias dos tipos de atendimentos que o paciente foi submetido nesta ou em outras instituições de saúde. De forma cronológica é apresentado informações do profissional, data do atendimento, tipo de atendimento, tipo de Alta (saída da instituição) e se houve registro de acidente. 
+
+Descrições dos campos:
+
+- **Profissional responsável**: O nome do médico ou outro profissional que o atendeu.
+
+- **Especialidade** : CBO do médico que realizou o atendimento ao paciente.
+
+- **Data de Entrada** : A data em que o atendimento foi registrado.
+
+- **Data de Saída** : Data da alta do paciente.
+
+- **Tipo de atendimento**: A especialidade médica ou o tipo de procedimento realizado (consulta, exame, internação, etc.).
+
+- ** Modalidade**: Tipo de modalidade de atendimento prestada ao paciente (SADT, Ambulatório, Virtual, etc.)
+
+- **Tipo de Alta**: A forma como você saiu da instituição após o atendimento (alta médica, alta hospitalar, etc.).
+
+- **Tipo de acidente**: Se o atendimento foi relacionado a um acidente, essa informação será indicada no card.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/UltimosAtendimentos.png?raw=true)
+
+##Agendamentos Futuros: 
+
+O Card Agendamentos Futuros: Com finalidade de saber se existe uma programação futura para o paciente, tais como terapias ou contatos assistenciais com especialistas, o Card agendamento Futuros apresenta dados que demonstram futuras intervenções clínicas para o paciente em atendimento.
+
+Descrições dos campos:
+
+- **Especialidade**: CBO do médico que realizouo paciente agendou o atendimento. 
+
+- **Tipo**: Procedimento que será realizado para o paciente (consulta, exames, etc.)
+
+- **Data e Hora**: Data e Hora do agendamento realizado pelo paciente. 
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/AgendamentosFuturos.png?raw=true)
+
+##Alergias e Reações Adversas: 
+
+O Card Alergias e Reações Adversas, tem por finalidade de mostrar registros de reações a substâncias e os tipos de manifestações que este paciente seja sensível, fazendo com que o profissional tenha meios de avaliações e definições de condutas mais seguras. 
+
+Descrições dos campos:
+
+- **Substância**: Tipos de alergias manifestadas pelo paciente (Alimentares, respiratórias, medicamentosas, picadas de insetos e dermatite de contato)
+
+- **Manifestações**: Sintomas apresentados no paciente devido aos tipos de alergias manifestadas no corpo humano.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Alergias.png?raw=true)
+
+##Imunizações: 
+
+O Card Imunizações reflete em ordem cronológicas registros de vacinas imunizantes registrados para o paciente. 
+
+Descrições dos campos:
+
+- **Descrição**: Informações das vacinas tomadas pelo paciente.
+
+- **Dose**: Quantidade de doses de vacinas aplicadas no paciente. 
+
+- **Data**: Data que foi realizada a aplicação da vacina no paciente. 
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Imunizacoes.png?raw=true)
+
+##Histórico de Doenças Familiares: 
+
+O Card Histórico de Doenças familiares: apresenta dados informados pelo próprio paciente ou por responsáveis nos atendimentos de dados de doenças na família que direciona a avaliação de possibilidade de desenvolvimento de doenças futuras devido a histórico familiar ou condições hereditárias. 
+
+Descrições dos campos:
+
+- **Data e Hora**: Data e horário que o paciente relata ao médico sobre algum histório de doença familiar.
+
+- **Descrição**: Informações citadas pelo paciente ao médico onde é informado algum histórico de doença na família.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/HistoricoFamiliar.png?raw=true)
+
+##Dados de Históricos Pessoal:
+
+O Card Dados do Histórico Pessoal: são dados informados pelos pacientes em contatos assistenciais neste ou em outras organizações de saúde, relatando seu histórico de vida como hábitos, vícios, doenças e tratamentos. 
+
+Funciona como um repositório centralizado de informações sobre a saúde do paciente. Ele reúne dados coletados durante consultas médicas, internações, exames e outros contatos com o sistema de saúde, tanto na organização atual quanto em outras instituições.
+
+Descrições dos campos:
+
+- **Data e Hora**: Data e horário que o paciente relata ao médico sobre algum histório pessoal de doença.
+
+- **Descrição**: Informações citadas pelo paciente ao médico onde é informado algum histórico de doença pessoal. 
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DadosHistóricoPessoal.png?raw=true)
+
+##Objetivos e Recomendações: 
+
+O Card Objetivos e Recomendações: Apresentam informações que são baseadas em orientações determinadas por profissionais de especialidades diversas em atendimentos anteriores para que o paciente cumpra. Como exemplo podemos citar orientações para exercícios físicos, submissão a programas de fumantes e outros. 
+
+Funciona como um guia personalizado para o paciente, reunindo orientações médicas e especialistas visando a sua saúde e bem-estar.
+
+- **Data e Hora**: Data e horário que o médico orienta o paciente sobre recomendações médicas. 
+
+- **Descrição**: Detalhar as ações que o paciente deve tomar para alcançar o objetivo.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/ObjetivosRecomendacoes.png?raw=true)
+
+##Condições e Diagnósticos: 
+
+O Card Condições e Diagnósticos: são informes provenientes de tabelas institucionais tais como o CID 10, CID 11 e CIAP 2 proveniente de registros de profissionais de diversas especialidades em contatos assistenciais ao paciente em atendimento. 
+
+Funciona como um repositório centralizado de informações sobre a saúde do paciente, reunindo diagnósticos médicos registrados por diversos especialistas ao longo do seu atendimento.
+
+As informações do card são provenientes de tabelas de codificação internacionalmente reconhecidas, como:
+
+- CID-10: Classificação Internacional de Doenças, 10ª Revisão, utilizada para padronizar o registro de doenças e outros problemas de saúde.
+
+- CID-11: Classificação Internacional de Doenças, 11ª Revisão, a versão mais recente da CID, que inclui novas categorias e códigos para doenças e condições emergentes.
+
+- CIAP-2: Classificação Internacional de Atenção Primária, 2ª Edição, focada na classificação de motivos de consulta na atenção primária à saúde, com ênfase em problemas de saúde prevalentes.
+
+Descrições dos Campos:
+
+- **Código**: São provenientes de tabelas de codificação internacionalmente reconhecidas.
+
+- **Descrição**: A descrição de condições e diagnósticos deve ser clara, objetiva e concisa, utilizando linguagem acessível aos profissionais de saúde e evitando termos técnicos desnecessários.
+
+- **Data e Horário**: Data e horário dos Diagnósticos concedidos ao paciente.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/CondicoesDiagnosticos.png?raw=true)
+
+##Dados Comorbidades: 
+
+O Card Dados Comorbidades são registros com base em tabelas institucionais como o CID 10, que essa ou outra instituição de saúde interoperada definiu como comorbidades ou síndrome de relevância para acompanhamento e tratamento. 
+
+As comorbidades, também conhecidas como doenças coexistentes, referem-se à presença de duas ou mais doenças crônicas em um mesmo indivíduo. Essas doenças podem ser independentes entre si ou interagir entre si, impactando significativamente a saúde do paciente.
+
+Dados de comorbidades são recursos valiosos para o aprimoramento da saúde individual e populacional. Ao coletar, analisar e utilizar esses dados de forma responsável e ética, podemos contribuir para a prevenção de doenças, o tratamento eficaz de comorbidades e a promoção de uma vida mais saudável para todos.
+
+Descrições dos Campos:
+
+- **Código**: é usado para identificar a comorbidade usando um sistema de código padronizado, como CID-10 ou CID-11.
+
+- **Descrição**: Fornece uma descrição detalhada da comorbidade, incluindo o diagnóstico específico, quaisquer sintomas ou achados relevantes e quaisquer complicações associadas. 
+
+- **Data e Hora**: Indica a data e hora em que a comorbidade foi diagnosticada ou identificada pela primeira vez.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DadosComorbidades.png?raw=true)
+
+##Impressão Clínica/ Hipótese:
+
+O Card Impressão Clínica/ Hipótese: são observações contextuais realizadas pelos profissionais responsáveis pelos atendimentos em descrever um parecer sobre a condição do paciente, orientando uma hipótese diagnóstica com base em suas observações clínicas relevantes. 
+
+Descrições dos Campos:
+
+- **Data e Hora**: Data e Hora que o responsável pelo atendimento informa o parecer sobre a condição do paciente.
+
+- **Descrição**: Explicação ou diagnóstico provisório que o profissional de saúde está considerando para a condição do paciente.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/ImpressaoClinica.png?raw=true)
+
+##Doença Atual do Paciente: 
+
+O Card Doença Atual do Paciente: também definida como História da Moléstia Atual (HMA) A história da doença atual (HDA), também chamada de história da moléstia atual (HMA) é um registro cronológico e detalhado do motivo que levou o paciente a procurar assistência médica, desde o seu início até o momento do atendimento em questão, informado por profissionais desta ou de outras instituições de saúde. 
+
+Descrições dos Campos: 
+
+- **Data e Hora**: Registra a data e hora em que a consulta foi realizada. Essa informação é crucial para rastrear o histórico médico do paciente e garantir que todos os registros sejam organizados cronologicamente.
+
+- **Descrição**: Fornece detalhes sobre o histórico da doença atual do paciente, incluindo a natureza, duração, localização e fatores desencadeantes dos sintomas. Esta informação é essencial para entender a condição do paciente e fazer um diagnóstico preciso.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DoencaAtual.png?raw=true)
+
+##Antropometria: 
+
+O Card Antropometria: é composto pelos registros em diversos atendimentos realizados pelo paciente das medidas corporais, ou seja, dados antropométricos. A ideia é apresentar para o profissional de saúde um histograma de medidas corporais do paciente ao longo dos atendimentos. 
+
+Descrições dos Campos: 
+
+- **Altura**: É a medida da distância vertical de uma pessoa do chão ao topo da cabeça. É um componente chave para o cálculo do índice de massa corporal (IMC) e da relação cintura-altura (RCQ), usados para avaliar a composição corporal geral e o risco de doenças crônicas.
+
+- **Peso**: É uma medida da massa corporal total de uma pessoa, incluindo ossos, músculos, gordura e órgãos. É outro fator importante na determinação do IMC e da RCQ, e também desempenha um papel na avaliação da saúde geral e do risco de certas condições, como doenças cardíacas, diabetes e alguns tipos de câncer. O IMC é uma ferramenta útil para rastrear possíveis riscos à saúde associados ao peso corporal, mas é importante notar que ele não leva em consideração fatores individuais, como massa muscular e distribuição de gordura corporal.
+
+- **IMC**: O IMC é uma medida de gordura corporal baseada na altura e no peso. É calculado dividindo o peso em quilogramas pela altura em metros ao quadrado, é uma ferramenta útil para o rastreamento de potenciais riscos à saúde associados ao peso corporal, mas é importante observar que ele não leva em consideração fatores individuais, como massa muscular e distribuição de gordura corporal.
+
+- **Cintura**: A circunferência da cintura é uma medida do contorno do abdome no nível do umbigo. É um indicador chave da gordura abdominal, que é um tipo de gordura particularmente ligada a um risco aumentado de doenças cardíacas, AVC e diabetes tipo 2. A circunferência da cintura é normalmente medida na parte mais estreita da cintura, ou logo acima dos ossos do quadril.
+
+- **Quadril**: A circunferência do quadril é uma medida do contorno dos quadris no ponto mais largo. É frequentemente usada em conjunto com a circunferência da cintura para calcular a relação cintura-quadril (RCQ), que é uma medida mais precisa da distribuição de gordura abdominal do que a circunferência da cintura isoladamente. Um RCQ saudável para homens é inferior a 1,0, e para mulheres é inferior a 0,85.
+
+- **Tórax**: A circunferência do tórax é uma medida do contorno do peito ao nível dos mamilos. Normalmente não é usada para fins de avaliação de saúde, mas pode ser usada para calcular a expansão torácica, que é uma medida da função pulmonar.
+
+- **RQC (Relação Cintura/Quadril)**: A RCQ é uma medida da proporção de gordura armazenada no abdômen em comparação com os quadris. É um indicador mais preciso da distribuição de gordura abdominal do que a circunferência da cintura isoladamente, pois leva em consideração o formato geral do corpo. Um RCQ saudável para homens é inferior a 1,0, e para mulheres é inferior a 0,85. Um RCQ elevado está associado a um risco aumentado de doenças cardíacas, AVC e diabetes tipo 2.
+
+- **PE (Exame Físico)**: O exame físico é uma parte crucial da avaliação antropométrica, pois permite ao profissional de saúde observar e avaliar a condição física geral do paciente. Isso pode incluir a verificação de sinais vitais, como pressão arterial, frequência cardíaca e frequência respiratória, além do exame da pele, olhos, ouvidos, nariz, garganta, pulmões, coração, abdômen e extremidades. Os resultados do exame físico podem ajudar a identificar quaisquer problemas de saúde potenciais e orientar a avaliação geral da saúde do paciente.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Antropometria.png?raw=true)
+
+##Sinais Vitais: 
+
+O Card Sinais Vitais: é composto pelos registros em diversos atendimentos realizados pelo paciente ou por ele mesmo informado, dos sinais vitais. A ideia é apresentar para o profissional de saúde um histograma de sinais vitais do paciente ao longo dos atendimentos. 
+
+Descriçoes dos Campos: 
+
+- **FR (Frequência Respiratória)**: A FR normal em adultos em repouso varia entre 12 e 20 respirações por minuto. Alterações na FR podem indicar problemas respiratórios, como pneumonia, asma ou insuficiência cardíaca. A FR aumentada (taquipneia) pode ser um sinal de estresse, ansiedade ou infecção, enquanto a FR diminuída (bradipneia) pode indicar problemas respiratórios graves ou sedação excessiva.
+
+- **FC (Frequência Cardíaca)**: A FC normal em adultos em repouso varia entre 60 e 100 batimentos por minuto. Alterações na FC podem indicar problemas cardíacos, distúrbios eletrolíticos ou alterações no estado de hidratação. A FC aumentada (taquicardia) pode ser um sinal de estresse, ansiedade, exercício físico ou perda de sangue, enquanto a FC diminuída (bradicardia) pode indicar problemas cardíacos, desidratação ou medicamentos que diminuem a frequência cardíaca.
+
+- **SAT AMB (Saturação de Oxigênio Arterial Ambiente)**: A SAT AMB normal em adultos saudáveis é de 95% ou superior. Níveis baixos de SAT AMB (hipoxemia) podem indicar problemas pulmonares, como pneumonia, asma ou embolia pulmonar, além de problemas cardíacos ou anemia. A oxigênioterapia suplementar pode ser necessária para aumentar a SAT AMB em pacientes com hipoxemia.
+
+- **TEMP (Temperatura Corporal)**: A temperatura corporal normal em adultos varia entre 36,5°C e 37,5°C. Alterações na temperatura corporal podem indicar infecções, doenças inflamatórias ou desequilíbrios hormonais. Febre (temperatura acima de 38°C) é um sinal comum de infecção, enquanto hipotermia (temperatura abaixo de 35°C) pode indicar choque, desnutrição ou exposição ao frio.
+
+- **PAD (Pressão Arterial Diastólica)**: A PAD normal em adultos saudáveis é inferior a 90 mmHg. Pressão arterial diastólica elevada (hipertensão) é um fator de risco significativo para doenças cardíacas, AVC e doenças renais. Medicamentos e mudanças no estilo de vida podem ser necessários para controlar a hipertensão.
+
+- **PAM (Pressão Arterial Média)**: A PAM normal em adultos saudáveis é inferior a 100 mmHg. Pressão arterial média elevada pode indicar hipertensão ou outras condições que afetam o fluxo sanguíneo.
+
+- **PAS (Pressão Arterial Sistólica)**: A PAS normal em adultos saudáveis é inferior a 140 mmHg. Pressão arterial sistólica elevada (hipertensão) é um fator de risco significativo para doenças cardíacas, AVC e doenças renais. Medicamentos e mudanças no estilo de vida podem ser necessários para controlar a hipertensão.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/SinaisVitais.png?raw=true)
+
+##Cirurgias: 
+
+O Card Cirurgias: é composto pelos registros de informações das cirurgias realizadas pelos pacientes. A ideia e sinalizar ao profissional de saúde os históricos de cirurgias efetivadas. 
+
+Descrições dos Campos: 
+
+- **Código**: O código é usado para identificar o procedimento cirúrgico específico que foi realizado. Esse código é tipicamente baseado em um sistema de codificação padronizado, como a Classificação Internacional de Doenças (CID)-10 ou os códigos de Terminologia Procedimental Atual (CPT). O código ajuda a garantir que o procedimento seja documentado com precisão e que os procedimentos de cobrança e reembolso adequados sejam seguidos.
+
+- **Descrição**: A descrição fornece um relato detalhado das etapas envolvidas no procedimento cirúrgico. Isso pode incluir informações sobre o tipo de incisão feita, os tecidos ou órgãos que foram operados e quaisquer técnicas ou implantes específicos que foram usados. A descrição é importante para documentar a extensão da cirurgia e para garantir que o procedimento foi realizado de acordo com o padrão de cuidado.
+
+- **Data e Hora**: A data e hora é importante para rastrear o histórico médico do paciente e garantir que o procedimento seja realizado no dia e horário correto.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Cirurgias.png?raw=true)
+
+##Prescrição Médica:
+
+O Card Prescrição Médica: são informes de Medicamentos prescritos dentro de unidades de saúde em atendimentos diversos, com base em prescrição médica realizada por profissionais de diversas especialidades e em modalidades diferentes de atendimento, dando ao profissional presente uma visão da conduta realizada na abordagem assistencial. 
+
+Descrições dos Campos: 
+
+- **Medicamento**: Descrição do medicamento que o paciente está utilizando ou utilizou durante um período ou de uso continuo.
+
+- **Tipo**: Este campo indica o tipo de prescrição para o medicamento. "Uso contínuo" significa que o medicamento deve ser tomado regularmente, conforme prescrito pelo médico. "Receita médica" significa que o medicamento só está disponível com receita médica.
+
+- **Data e Hora**: Data e hora em que a prescrição foi escrita.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/PrescricaoMedicamento.png?raw=true)
+
+##Exames Solicitados:
+
+O Card Exames Solicitados: são aqueles itens de exames de imagens ou laboratoriais que foram solicitados por profissionais de especialidades diferentes para o paciente realizar de forma eletiva, controle ou emergência. 
+
+Descrições dos Campos: 
+
+- **Código**: O código é um identificador único que serve para diferenciar um exame do outro. É utilizado internamente pelo laboratório ou clínica para rastrear o exame e associá-lo ao paciente e à solicitação médica. O código pode ser alfanumérico e seguir diferentes padrões, como códigos de barras ou códigos específicos para cada tipo de exame.
+
+- **Descrição**: A descrição fornece informações precisas sobre o tipo de exame, o material biológico a ser coletado (sangue, urina, fezes, etc.) e a metodologia utilizada para a análise. Essa informação é crucial para que o paciente se prepare adequadamente para o exame, como jejum ou coleta em horário específico, e para que o profissional de saúde interprete corretamente os resultados.
+
+- **Data e Hora**: Indica o dia e a hora em que o paciente deve se apresentar para a coleta do material biológico ou a realização do exame.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/ExamesSolicitados.png?raw=true)
+
+##Exames Realizados:  
+
+O Card Exames realizados: são aqueles que foram executados em qualquer serviço e que apresenta meio de observância pelo profissional presente dos laudos e ou resultados imputados no histórico clínico do paciente. 
+
+Descrições dos Campos: 
+
+- **Código**: O código é um identificador único que serve para diferenciar um exame do outro. É utilizado internamente pelo laboratório ou clínica para rastrear o exame e associá-lo ao paciente e à solicitação médica. O código pode ser alfanumérico e seguir diferentes padrões, como códigos de barras ou códigos específicos para cada tipo de exame.
+
+- **Descrição**: A descrição fornece informações precisas sobre o tipo de exame, o material biológico coletado (sangue, urina, fezes, etc.) e a metodologia utilizada para a análise. Essa informação é crucial para que o paciente se prepare adequadamente para o exame, como jejum ou coleta em horário específico, e para que o profissional de saúde interprete corretamente os resultados.
+
+- **Tipo**: O tipo indica a categoria do exame, como exame laboratorial, exame de imagem ou exame funcional. Essa classificação ajuda a organizar os exames e facilita a busca por informações específicas. O tipo de exame também fornece contexto para a compreensão dos resultados e suas implicações clínicas.
+
+- **Data e Hora**: Indica o dia e o horário em que o paciente foi submetido ao exame. Essa informação é essencial para acompanhar o histórico médico do paciente, avaliar a progressão de um quadro clínico e garantir a precisão dos resultados. A data também permite comparações entre exames realizados em momentos diferentes.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/ExamesRealizados.png?raw=true)
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Resultado.png?raw=true)
+
+## Documentos Digitalizados:
+
+O Card Documentos Digitalizados: são arquivos em formato PDF, GIF ou JPEG contemplando conteúdos diversos como cópia de laudos médicos, documentos, procurações e outros anexado no histórico do paciente e de forma documental orientando a algum processo administrativo ou assistencial aos envolvidos no atendimento. 
+
+Descrições dos Campos: 
+
+- **Título**: Descrição do documento.
+
+- **Data e Hora**: Indica data e horário que o documento foi encaminhado para o sistema. 
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DocDigitalizado1.png?raw=true)
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DocDigitalizado2.png?raw=true)
+
+## Receitas: 
+
+O Card Receitas: são os registros de receitas em arquivos PDF ou de forma estruturada emitidas para o paciente em abordagens assistenciais realizadas nesta ou em outra unidade de atendimento. 
+
+- Descrições dos Campos: 
+
+- **Título**: Descrição do titulo da receita.
+
+- **Data e Hora**: Indica data e horário que a receita foi encaminhado para o sistema.
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Receitas.png?raw=true)
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/Receitas2.png?raw=true)
+
+##OPME: 
+
+O Card OPME: registra Dados de aplicação de Órtese, Prótese ou Materiais Especiais utilizados em algum procedimento cirúrgico realizado pelo paciente nesta ou em outra instituição de saúde. 
+
+Descrições dos campos:
+
+- **Data**: A data indica o dia em que o OPME foi criado e enviado ao fornecedor. Essa informação é crucial para rastrear o pedido, acompanhar o prazo de entrega e garantir que os materiais sejam recebidos dentro do tempo previsto. A data também é importante para fins de controle de estoque e para identificar possíveis atrasos ou pendências na entrega.
+
+- **Código**: O código é um identificador único que serve para diferenciar um OPME do outro. Ele é utilizado internamente pela instituição de saúde para rastrear o pedido, associá-lo ao paciente ou serviço solicitante e garantir a correta entrega dos materiais. O código pode ser alfanumérico e seguir diferentes padrões, como códigos de barras ou códigos específicos para cada tipo de OPME.
+
+- **Descrição**: A descrição fornece informações precisas sobre o tipo de material, a quantidade solicitada, as características específicas (tamanho, material, marca, modelo, etc.) e a finalidade de uso. Essa informação é crucial para garantir que o material correto seja entregue e para que o profissional de saúde possa utilizá-lo de forma segura e eficaz. A descrição também deve incluir informações sobre o paciente ou serviço solicitante, como nome, unidade e número de prontuário.
+
+- **Risco Anvisa**: O risco ANVISA indica o nível de risco do material médico, de acordo com a classificação da Agência Nacional de Vigilância Sanitária (ANVISA). Essa classificação é baseada em diversos critérios, como o potencial de dano ao paciente, a complexidade da utilização e a necessidade de controle rigoroso. O conhecimento do risco ANVISA permite que a instituição de saúde tome as medidas de precaução adequadas durante o armazenamento, transporte, manipulação e utilização do material. As categorias de risco da ANVISA são:
+
+- Classe I: Risco baixo
+- Classe II: Risco médio
+- Classe III: Risco alto
+- Classe IV: Risco muito alto
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/OPME.png?raw=true)
+
+
+# DTO - **DataHal** - Sua Inteligência Artificial para Assistência Médica
+
+**Introdução**
+
+O **DataHal** é um sistema de inteligência artificial inovador que revoluciona a forma como os médicos prestam assistência aos seus pacientes. Através de uma interface intuitiva e amigável, o **DataHal** fornece acesso instantâneo a uma gama completa de informações clínicas, desde dados históricos e prontuários até pesquisas sobre hipóteses diagnósticas e condutas clínicas recomendadas. Com o **DataHal**, os médicos podem tomar decisões mais informadas e eficientes, otimizando o cuidado do paciente e elevando a qualidade da assistência médica.
+
+- **Benefícios do DataHal**
+
+**Acesso rápido e fácil a informações clínicas**: O **DataHal** reúne em um único local todos os dados relevantes sobre o paciente, incluindo histórico médico, prontuário, exames e resultados laboratoriais. Isso elimina a necessidade de pesquisas manuais em diferentes sistemas, economizando tempo e otimizando o fluxo de trabalho.
+
+**Suporte para diagnósticos precisos**: O **DataHal** utiliza algoritmos avançados de inteligência artificial para analisar os dados do paciente e sugerir hipóteses diagnósticas precisas e relevantes. Isso auxilia os médicos na identificação rápida e precisa das doenças, possibilitando o início precoce do tratamento adequado.
+
+**Recomendações de condutas clínicas personalizadas**: Com base no diagnóstico e nas características do paciente, o **DataHal** fornece sugestões personalizadas de condutas clínicas, incluindo medicamentos, procedimentos e acompanhamento. Isso facilita a tomada de decisões terapêuticas individualizadas e otimiza o cuidado do paciente.
+
+**Melhoria na qualidade da assistência médica**: O uso do **DataHal** contribui para a melhora da qualidade da assistência médica, através da otimização do tempo dos médicos, do aumento da precisão dos diagnósticos e da individualização das condutas terapêuticas.
+
+**Redução de custos**: A otimização do tempo dos médicos e a redução de erros diagnósticos e terapêuticos podem levar à diminuição dos custos com saúde.
+
+- **Considerações importantes**
+
+O **DataHal** é uma ferramenta auxiliar, não um substituto para o julgamento clínico: O sistema fornece informações e sugestões, mas a decisão final sobre o diagnóstico e o tratamento do paciente sempre cabe ao médico.
+
+É importante manter o **DataHal** atualizado com as últimas informações médicas: O sistema é atualizado periodicamente com novas informações médicas, mas é importante que os médicos também se mantenham atualizados através de cursos, congressos e leitura de literatura especializada.
+
+A segurança e a confidencialidade dos dados dos pacientes devem ser priorizadas: O **DataHal** armazena dados sensíveis dos pacientes, portanto, é crucial garantir a segurança e a confidencialidade dessas informações.
+
+- **Conclusão**
+
+O **DataHal** é uma ferramenta poderosa que pode transformar a forma como os médicos prestam assistência aos seus pacientes. Ao combinar inteligência artificial com dados clínicos abrangentes, o **DataHal** oferece aos médicos a capacidade de tomar decisões mais informadas e eficientes, otimizando o cuidado do paciente e elevando a qualidade da assistência médica.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DataHalSistema.png?raw=true)
+
+
+# DTO - **DataAnalytics**: BI para Controle de Dados Clínicos 
+
+O **DataAnalytics** é um sistema de Business Intelligence (BI) completo que oferece aos profissionais da área da saúde uma visão abrangente e detalhada dos dados clínicos coletados durante um período específico. 
+
+Através de dashboards interativos e relatórios customizáveis, o sistema facilita a análise e o monitoramento da quantidade de dados, permitindo uma melhor gestão da informação e a tomada de decisões mais estratégicas.
+
+**Benefícios do DataAnalytics**
+
+- **Visão geral dos dados clínicos**: O **DataAnalytics** fornece uma visão geral dos dados clínicos coletados, incluindo o número de alergias e intolerâncias, diagnósticos, medicamentos, procedimentos e exames. Isso permite aos profissionais da saúde identificar rapidamente as áreas que exigem mais atenção e tomar medidas para otimizar o processo de coleta e análise de dados.
+
+- **Análise detalhada de dados**: O sistema oferece a capacidade de analisar os dados em detalhes, permitindo que os usuários filtrem, segmentem e comparem informações de acordo com suas necessidades específicas. Isso facilita a identificação de tendências, padrões e anomalias nos dados, possibilitando a realização de estudos e pesquisas mais aprofundadas.
+
+- **Monitoramento do desempenho**: O **DataAnalytics** permite monitorar o desempenho da equipe de saúde em relação à coleta e análise de dados. Isso possibilita identificar áreas de melhoria e implementar medidas para otimizar o processo e aumentar a eficiência da equipe.
+
+- **Tomada de decisões mais estratégicas**: Com base na análise dos dados clínicos, os profissionais da saúde podem tomar decisões mais estratégicas para melhorar a qualidade da assistência prestada aos pacientes. Isso inclui a implementação de novos protocolos de atendimento, a otimização do uso de recursos e a identificação de oportunidades para aprimorar os serviços de saúde.
+
+- **Melhoria da qualidade da assistência**: O uso do **DataAnalytics** contribui para a melhora da qualidade da assistência à saúde, através da otimização da coleta e análise de dados, do monitoramento do desempenho da equipe e da tomada de decisões mais estratégicas.
+
+**Exemplos de Gráficos que podem ser parametrizados no sistema**:
+
+**Gráficos Gerais**
+
+O menu de dados com gráficos gerais do **DataAnalytics** oferece uma visão abrangente da quantidade de dados clínicos coletados durante um período específico. Os gráficos apresentam quantitativos de:
+
+- **Alergias e intolerâncias**: Número de alergias e intolerâncias registradas nos prontuários dos pacientes.
+
+- **Diagnósticos**: Número de diagnósticos realizados nos pacientes durante o período analisado.
+
+- **Medicamentos**: Número de medicamentos prescritos aos pacientes.
+
+- **Procedimentos**: Número de procedimentos realizados nos pacientes.
+
+- **Exames**: Número de exames realizados nos pacientes.
+
+Os gráficos são interativos e permitem que os usuários filtrem, segmentem e comparem as informações de acordo com suas necessidades específicas. Isso facilita a análise detalhada dos dados e a identificação de tendências e padrões.
+
+**Benefícios do Menu de Dados com Gráficos Gerais**
+
+- **Visão rápida da quantidade de dados**: O menu de dados com gráficos gerais oferece uma visão rápida da quantidade de dados clínicos coletados durante um período específico. Isso permite aos profissionais da saúde identificar rapidamente as áreas que exigem mais atenção e tomar medidas para otimizar o processo de coleta e análise de dados.
+
+- **Identificação de tendências**: Os gráficos interativos permitem que os usuários identifiquem tendências e padrões nos dados, o que pode ser útil para tomar decisões estratégicas sobre a gestão da informação e a prestação de serviços de saúde.
+
+- **Comparação de dados**: O menu de dados permite comparar as informações de diferentes períodos ou unidades de saúde, o que pode ser útil para identificar áreas de melhoria e implementar medidas corretivas.
+
+**Parametrização dos Gráficos**
+
+O **DataAnalytics** permite que os usuários personalizem os gráficos de acordo com suas necessidades específicas. As opções de parametrização incluem:
+
+- **Filtros**: Selecionar dados por período, unidade de saúde, profissional, paciente, doença, procedimento, medicamento, entre outros.
+
+- **Agrupamentos**: Agrupar os dados por diferentes critérios, como idade, sexo, renda, escolaridade, região geográfica, entre outros.
+
+- **Métricas**: Selecionar as métricas a serem exibidas nos gráficos, como número de casos, taxa de incidência, prevalência, média, mediana, entre outras.
+
+- **Visualização**: Escolher o tipo de gráfico mais adequado para a análise dos dados, como barras, linhas, tortas, mapas, entre outros.
+
+**Exportação de Relatórios**
+
+Os dashboards e gráficos do **DataAnalytics** podem ser facilmente exportados para diferentes formatos, como PDF, Excel e PNG. Isso permite que os usuários compartilhem os resultados das análises com colegas, gestores e outras partes interessadas.
+
+**Conclusão**
+
+Os gráficos analíticos do **DataAnalytics** são ferramentas essenciais para os profissionais da saúde que buscam otimizar a gestão da informação e tomar decisões mais estratégicas para a melhoria da qualidade da assistência prestada aos pacientes. 
+
+Através da visualização clara e concisa dos dados, os gráficos permitem identificar tendências, padrões e anomalias, possibilitando a implementação de medidas de intervenção e a otimização dos recursos disponíveis.
+
+![Texto Alternativo](https://github.com/dataopera/dataopera_spec/blob/master/images/datamea/DataAnalytics.png?raw=true)
 
 
 
-### Exemplo de chamada do DataMea (versão 2)
-
-> https://app.datamea.com.br/index.html?token=dfb12337d6a24f7b26123e9bc991234590844b1d 
 
 
-#### Exemplo de implementação 
-
-Para auxiliar na implementação, segue um exemplo em Javascript. 
-Vale lembrar que é somente uma ilustração, cada sistema/linguagem tem suas características e necessidades.
-
-```
-$.ajax({ 
-   type: 'POST', 
-   url: "https://tune.dataopera.com.br/api/oauth", 
-   data: { 
-       "grant_type": "client_credentials", 
-       "client_id": "CLIENT-ID-FORNECIDO", 
-       "client_secret": "PASSWORD_FORNECIDO", 
-       "patient": { 
-           "publicToken": "08650301432965004", 
-           "nome": "Marlene de Souza Antunes", 
-           "doc-cpf": "11111111111"
-        },
-       "professional": { 
-           "code": "08650301432965004", 
-           "nome": "Marlene de Souza Antunes", 
-           "doc-cpf": "11111111111"
-        }
-   }, 
-   dataType: "json", 
-   contentType: 'application/x-www-form-urlencoded; 
-   charset=utf-8', 
-   xhrFields: { withCredentials: true }, 
-   success: function (result) { 
-       var token = result; 
-       $(location).attr('href', https://app.datamea.com.br/'+ token; 
-   }, 
-    error: function (req, status, error) { 
-        alert(error); 
-    } 
-});
-```
 
 
-### Exemplo de chamada do DataMea (versão 1 - legado)
-
-> https://datamea.com.br/index.html?token=dfb12337d6a24f7b26123e9bc991234590844b1d 
 
 
-#### Exemplo de implementação 
 
-Para auxiliar na implementação, segue um exemplo em Javascript. 
-Vale lembrar que é somente uma ilustração, cada sistema/linguagem tem suas características e necessidades.
 
-```
-$.ajax({ 
-   type: 'POST', 
-   url: "https://tune.dataopera.com.br/api/oauth", 
-   data: { 
-       "grant_type": "client_credentials", 
-       "client_id": "CLIENT-ID-FORNECIDO", 
-       "client_secret": "PASSWORD_FORNECIDO", 
-       "patient": { 
-           "publicToken": "08650301432965004", 
-           "nome": "Marlene de Souza Antunes", 
-           "doc-cpf": "11111111111"
-        },
-       "professional": { 
-           "code": "08650301432965004", 
-           "nome": "Marlene de Souza Antunes", 
-           "doc-cpf": "11111111111"
-        }
-   }, 
-   dataType: "json", 
-   contentType: 'application/x-www-form-urlencoded; 
-   charset=utf-8', 
-   xhrFields: { withCredentials: true }, 
-   success: function (result) { 
-       var token = result; 
-       $(location).attr('href', https://datamea.com.br/index.html?token='+ token; 
-   }, 
-    error: function (req, status, error) { 
-        alert(error); 
-    } 
-});
-```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
